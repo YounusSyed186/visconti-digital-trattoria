@@ -1,26 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios to make HTTP requests
+import axios from 'axios';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ArrowLeft } from 'lucide-react';
 
-const MenuSection = () => {
+const Menu = () => {
   const [activeTab, setActiveTab] = useState<string>("pizze-tradizionali");
-  const [menuItems, setMenuItems] = useState<{ [key: string]: any[] }>({}); // Updated state for grouped categories
-  const [loading, setLoading] = useState(true); // For loading state
-  const [error, setError] = useState<string | null>(null); // To capture errors
+  const [menuItems, setMenuItems] = useState<{ [key: string]: any[] }>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}api/menu`);
-        console.log('Fetched menu items:', response.data); // Log the data to check its structure
-
-        // Check if the response contains the expected structure
+        
         if (response.data && response.data.groupedItems && typeof response.data.groupedItems === 'object') {
-          setMenuItems(response.data.groupedItems); // Set groupedItems as the menu data
+          setMenuItems(response.data.groupedItems);
         } else {
           setError('API response is not in the expected format');
         }
@@ -34,43 +33,66 @@ const MenuSection = () => {
     fetchMenuItems();
   }, []);
 
-  // Define the labels for the tabs based on categories
   const tabLabels = {
     "pizze-tradizionali": "🍕 Pizze Tradizionali",
-    "pizze-speciali": "⭐ Pizze Speciali",
+    "pizze-speciali": "⭐ Pizze Speciali", 
     "calzoni": "🥟 Calzoni",
     "kebab-panini": "🥙 Kebab & Panini",
     "burgers": "🍔 Burgers & Sides",
     "bibite": "🥤 Bibite",
   };
 
-  const handleShowFullMenu = (category: string): void => {
-    navigate(`/menu/full/${category}`, {
-      state: { category, items: menuItems[category], categoryLabel: tabLabels[category] }
-    });
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading menu...</p>
+        </div>
+      </div>
+    );
+  }
 
-  if (loading) return <div>Loading...</div>; // Show loading state
-  if (error) return <div>{error}</div>; // Show error message
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <p className="text-destructive mb-4">{error}</p>
+          <Button onClick={() => navigate('/')}>Go Back Home</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <section id="menu" className="py-12 md:py-20 px-4 bg-background relative overflow-hidden">
+    <div className="min-h-screen py-12 md:py-20 px-4 bg-background relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-1/4 left-1/3 text-7xl md:text-9xl">🍕</div>
+        <div className="absolute bottom-1/3 right-1/4 text-6xl md:text-8xl">🥙</div>
+        <div className="absolute top-2/3 left-1/4 text-5xl md:text-7xl">🍔</div>
+        <div className="absolute top-1/2 right-1/3 text-6xl md:text-8xl">🥤</div>
+      </div>
+
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gold mb-4">
-            La Nostra Menu
-          </h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
-            Scopri i nostri piatti autentici, preparati con ingredienti freschi e passione italiana
-          </p>
-          <Button
-            onClick={() => navigate('/menu')}
-            variant="outline"
-            className="border-gold text-gold hover:bg-gold hover:text-black font-medium"
+        {/* Header with back button */}
+        <div className="flex items-center mb-8">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate(-1)}
+            className="flex items-center mr-4"
           >
-            Vedi Menu Completo
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
           </Button>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gold">
+            La Nostra Menu Completa
+          </h1>
         </div>
+
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-12">
+          Esplora la nostra selezione completa di pizze tradizionali, specialità, kebab e molto altro
+        </p>
 
         {/* Menu Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -88,9 +110,8 @@ const MenuSection = () => {
 
           {Object.entries(menuItems).map(([category, items]) => (
             <TabsContent key={category} value={category}>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {/* Ensure items is an array before applying slice */}
-                {Array.isArray(items) && items.slice(0, 6).map((item, index) => (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {Array.isArray(items) && items.map((item, index) => (
                   <Card key={index} className="bg-card/80 backdrop-blur-sm border-border hover:border-gold/50 transition-all duration-300 hover:shadow-warm group overflow-hidden">
                     <div className="relative h-48 overflow-hidden">
                       <img
@@ -116,24 +137,12 @@ const MenuSection = () => {
                   </Card>
                 ))}
               </div>
-
-              {/* Show Full Menu Button */}
-              {items.length && (
-                <div className="text-center mt-8">
-                  <Button
-                    onClick={() => handleShowFullMenu(category)}
-                    className="bg-gold text-black hover:bg-black hover:text-gold font-medium py-3 px-6 rounded-lg transition-all duration-300"
-                  >
-                    Show Full Menu
-                  </Button>
-                </div>
-              )}
             </TabsContent>
           ))}
         </Tabs>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default MenuSection;
+export default Menu;

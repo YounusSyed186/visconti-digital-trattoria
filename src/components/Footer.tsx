@@ -39,7 +39,7 @@ const Footer = () => {
             <h4 className="font-semibold text-foreground mb-4">Link Rapidi</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="/" className="text-muted-foreground hover:text-gold transition-colors">
+                <a href="#" className="text-muted-foreground hover:text-gold transition-colors">
                   Home
                 </a>
               </li>

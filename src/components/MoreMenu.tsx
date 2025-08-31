@@ -1,23 +1,19 @@
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from 'lucide-react';
-import { MenuItem } from '@/types/menu';
+import { MenuListingPageProps, MenuItem } from '@/types/menu';
 
 const MenuListingPage = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  
-  // In Next.js, we'd need to pass this data differently or fetch it
-  const category = searchParams.get('category');
-  const items: MenuItem[] = []; // This would be fetched based on category
-  const categoryLabel = '';
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { category, items, categoryLabel } = location.state as MenuListingPageProps;
 
   if (!category || !items) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>No menu data available. Please go back to the menu.</p>
-        <Button onClick={() => router.push('/')}>Go Back</Button>
+        <Button onClick={() => navigate('/')}>Go Back</Button>
       </div>
     );
   }
@@ -35,7 +31,7 @@ const MenuListingPage = () => {
         <div className="flex items-center mb-8">
           <Button 
             variant="outline" 
-            onClick={() => router.back()}
+            onClick={() => navigate(-1)}
             className="flex items-center mr-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
