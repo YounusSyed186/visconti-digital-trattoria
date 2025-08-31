@@ -6,6 +6,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Menu from "./pages/Menu";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/AdminLogin";
+import AdminLayout from "./components/admin/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
+import MenuManagement from "./pages/admin/MenuManagement";
 import { DayPickerProvider } from "react-day-picker";
 import MenuListingPage from "./components/MoreMenu";
 import FullMenuPage from "./components/MoreMenu";
@@ -30,6 +34,16 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/menu" element={<Menu />} />
               <Route path="/menu/full/:category" element={<FullMenuPage />} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="menu" element={<MenuManagement />} />
+                <Route path="orders" element={<div className="p-6 text-center text-muted-foreground">Orders page coming soon...</div>} />
+                <Route path="settings" element={<div className="p-6 text-center text-muted-foreground">Settings page coming soon...</div>} />
+              </Route>
+              
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
