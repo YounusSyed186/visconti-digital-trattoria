@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import Menu from "./pages/Menu";
 import NotFound from "./pages/NotFound";
 import { DayPickerProvider } from "react-day-picker";
 import MenuListingPage from "./components/MoreMenu";
@@ -27,7 +28,8 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-                <Route path="/menu/full/:category" element={<FullMenuPage />} />
+              <Route path="/menu" element={<Menu />} />
+              <Route path="/menu/full/:category" element={<FullMenuPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

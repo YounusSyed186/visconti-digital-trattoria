@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/Bg1.png";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  
   const scrollToMenu = () => {
     const menuSection = document.getElementById('menu');
     menuSection?.scrollIntoView({ behavior: 'smooth' });
@@ -47,10 +50,10 @@ const HeroSection = () => {
           <Button 
             variant="outline" 
             size="lg"
-            onClick={scrollToMenu}
+            onClick={() => navigate('/menu')}
             className="border-2 border-gold text-gold hover:bg-gold hover:text-black font-semibold px-8 py-4 text-lg transition-all duration-300 transform hover:scale-105"
           >
-            📋 View Menu
+            📋 View Full Menu
           </Button>
         </div>
         
