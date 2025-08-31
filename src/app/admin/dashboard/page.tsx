@@ -9,7 +9,7 @@ import {
   Clock
 } from 'lucide-react';
 
-const Dashboard = () => {
+export default function DashboardPage() {
   const stats = [
     {
       title: "Total Orders Today",
@@ -182,6 +182,4 @@ const Dashboard = () => {
       </div>
     </div>
   );
-};
-
-export default Dashboard;
+}

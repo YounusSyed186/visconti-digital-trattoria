@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +12,6 @@ import {
   Edit, 
   Trash2, 
   Search,
-  Filter,
   Save,
   X
 } from 'lucide-react';
@@ -25,7 +26,7 @@ interface MenuItem {
   available: boolean;
 }
 
-const MenuManagement = () => {
+export default function MenuManagementPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -377,6 +378,4 @@ const MenuManagement = () => {
       )}
     </div>
   );
-};
-
-export default MenuManagement;
+}

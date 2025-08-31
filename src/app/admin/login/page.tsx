@@ -1,17 +1,19 @@
+'use client'
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff, Lock, User } from 'lucide-react';
 
-const AdminLogin = () => {
+export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +23,7 @@ const AdminLogin = () => {
     setTimeout(() => {
       if (email === 'admin@visconti.com' && password === 'admin123') {
         localStorage.setItem('adminToken', 'mock-admin-token');
-        navigate('/admin/dashboard');
+        router.push('/admin/dashboard');
       } else {
         alert('Invalid credentials. Use admin@visconti.com / admin123');
       }
@@ -114,6 +116,4 @@ const AdminLogin = () => {
       </Card>
     </div>
   );
-};
-
-export default AdminLogin;
+}

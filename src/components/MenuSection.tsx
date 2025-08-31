@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import axios from 'axios'; // Import axios to make HTTP requests
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,12 +10,12 @@ const MenuSection = () => {
   const [menuItems, setMenuItems] = useState<{ [key: string]: any[] }>({}); // Updated state for grouped categories
   const [loading, setLoading] = useState(true); // For loading state
   const [error, setError] = useState<string | null>(null); // To capture errors
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}api/menu`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URI || 'http://localhost:3001/'}api/menu`);
         console.log('Fetched menu items:', response.data); // Log the data to check its structure
 
         // Check if the response contains the expected structure
@@ -45,9 +45,7 @@ const MenuSection = () => {
   };
 
   const handleShowFullMenu = (category: string): void => {
-    navigate(`/menu/full/${category}`, {
-      state: { category, items: menuItems[category], categoryLabel: tabLabels[category] }
-    });
+    router.push(`/menu/full/${category}`);
   };
 
   if (loading) return <div>Loading...</div>; // Show loading state
@@ -64,7 +62,7 @@ const MenuSection = () => {
             Scopri i nostri piatti autentici, preparati con ingredienti freschi e passione italiana
           </p>
           <Button
-            onClick={() => navigate('/menu')}
+            onClick={() => router.push('/menu')}
             variant="outline"
             className="border-gold text-gold hover:bg-gold hover:text-black font-medium"
           >

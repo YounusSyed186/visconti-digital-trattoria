@@ -1,19 +1,41 @@
+'use client'
+
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from 'lucide-react';
 import { MenuItem } from '@/types/menu';
+import { useEffect, useState } from 'react';
 
-const MenuListingPage = () => {
+export default function FullMenuPage({ params }: { params: { category: string } }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-  // In Next.js, we'd need to pass this data differently or fetch it
-  const category = searchParams.get('category');
-  const items: MenuItem[] = []; // This would be fetched based on category
-  const categoryLabel = '';
+  const [items, setItems] = useState<MenuItem[]>([]);
+  const [categoryLabel, setCategoryLabel] = useState('');
 
-  if (!category || !items) {
+  useEffect(() => {
+    // In a real app, you'd fetch the data based on the category
+    // For now, we'll use mock data or redirect back if no data
+    const mockItems: MenuItem[] = [
+      {
+        name: 'Margherita',
+        description: 'Pomodoro, mozzarella, basilico',
+        price: '€8.50',
+        image: '/api/placeholder/300/200'
+      },
+      {
+        name: 'Quattro Stagioni',
+        description: 'Pomodoro, mozzarella, funghi, prosciutto, carciofi, olive',
+        price: '€12.00',
+        image: '/api/placeholder/300/200'
+      }
+    ];
+
+    setItems(mockItems);
+    setCategoryLabel(`🍕 ${params.category.replace('-', ' ')}`);
+  }, [params.category]);
+
+  if (!items.length) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>No menu data available. Please go back to the menu.</p>
@@ -80,6 +102,4 @@ const MenuListingPage = () => {
       </div>
     </div>
   );
-};
-
-export default MenuListingPage;
+}

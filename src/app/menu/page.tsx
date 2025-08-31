@@ -1,22 +1,24 @@
+'use client'
+
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from 'lucide-react';
 
-const Menu = () => {
+export default function MenuPage() {
   const [activeTab, setActiveTab] = useState<string>("pizze-tradizionali");
   const [menuItems, setMenuItems] = useState<{ [key: string]: any[] }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}api/menu`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URI || 'http://localhost:3001/'}api/menu`);
         
         if (response.data && response.data.groupedItems && typeof response.data.groupedItems === 'object') {
           setMenuItems(response.data.groupedItems);
@@ -58,7 +60,7 @@ const Menu = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <p className="text-destructive mb-4">{error}</p>
-          <Button onClick={() => navigate('/')}>Go Back Home</Button>
+          <Button onClick={() => router.push('/')}>Go Back Home</Button>
         </div>
       </div>
     );
@@ -79,7 +81,7 @@ const Menu = () => {
         <div className="flex items-center mb-8">
           <Button 
             variant="outline" 
-            onClick={() => navigate(-1)}
+            onClick={() => router.back()}
             className="flex items-center mr-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -143,6 +145,4 @@ const Menu = () => {
       </div>
     </div>
   );
-};
-
-export default Menu;
+}

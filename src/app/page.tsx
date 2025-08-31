@@ -4,7 +4,7 @@ import MenuSection from "@/components/MenuSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
-const Index = () => {
+export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <HeroSection />
@@ -14,6 +14,4 @@ const Index = () => {
       <Footer />
     </div>
   );
-};
-
-export default Index;
+}
