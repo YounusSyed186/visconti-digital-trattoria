@@ -13,6 +13,7 @@ import MenuManagement from "./pages/admin/MenuManagement";
 import { DayPickerProvider } from "react-day-picker";
 import FullMenuPage from "./components/MoreMenu";
 import PhysicalMenuCarousel from "./components/Physicalmenu";
+import './il8n'
 
 const queryClient = new QueryClient();
 

@@ -1,0 +1,105 @@
+{
+  "heroSection": {
+    "title": "Visconti",
+    "subtitle": "Pizzeria Kebab",
+    "tagline": "Authentic Italian Pizza & Halal Kebabs in Pavia",
+    "orderOnline": "Order Online",
+    "viewMenu": "View Full Menu",
+    "orderVia": "Order via:",
+    "platforms": {
+      "justEat": "JustEat",
+      "deliveroo": "Deliveroo"
+    }
+  },
+  "aboutSection": {
+    "heading": "Welcome to Visconti",
+    "description": "Visconti Pizzeria Kebab brings together the timeless flavors of Italy with the authentic taste of kebabs. Located in the heart of Pavia, we serve fresh, Halal-certified pizzas, kebabs, panini, and more — all crafted with passion and tradition.",
+    "stats": {
+      "yearsExperience": {
+        "label": "Years Experience",
+        "value": "15+"
+      },
+      "halalCertified": {
+        "label": "Halal Certified",
+        "value": "100%"
+      }
+    },
+    "features": {
+      "authItalianRecipes": "Authentic Italian Recipes",
+      "freshKebabs": "Fresh Halal Kebabs",
+      "fastDelivery": "Fast Delivery",
+      "premiumQuality": "Premium Quality",
+      "badge": "Made Fresh Daily"
+    }
+  },
+  "menuSection": {
+    "heading": "La Nostra Menu",
+    "subheading": "Scopri i nostri piatti autentici, preparati con ingredienti freschi e passione italiana",
+    "seeFullMenuButton": "Vedi Menu Completo",
+    "tabs": {
+      "pizze-tradizionali": "🍕 Pizze Tradizionali",
+      "pizze-speciali": "⭐ Pizze Speciali",
+      "calzoni": "🥟 Calzoni",
+      "kebab-panini": "🥙 Kebab & Panini",
+      "burgers": "🍔 Burgers & Sides",
+      "bibite": "🥤 Bibite"
+    },
+    "showFullMenuButton": "Show Full Menu"
+  },
+  "menuListingPage": {
+    "backButton": "Back",
+    "menuItems": {
+      "defaultHeading": "Menu Items"
+    }
+  },
+  "contactSection": {
+    "heading": "Contact & Location",
+    "subheading": "Come visit us in the heart of Pavia",
+    "contactInfo": {
+      "title": "Contact Information",
+      "address": {
+        "label": "Address",
+        "value": "Corso Cairoli 51, Pavia, 27100, Italy"
+      },
+      "phone": {
+        "label": "Phone",
+        "value": "+39 0382 458734"
+      },
+      "hours": {
+        "label": "Opening Hours",
+        "value": "Every day: 10:00 - 01:00"
+      },
+      "orderOnline": {
+        "title": "Order Online",
+        "justEat": "JustEat",
+        "deliveroo": "Deliveroo"
+      },
+      "freeDelivery": {
+        "title": "Free Delivery",
+        "description": "Free delivery for orders over €8. Below €8, delivery costs €2"
+      },
+      "directions": "Directions"
+    }
+  },
+  "footer": {
+    "brand": {
+      "name": "Visconti Pizzeria Kebab",
+      "description": "Authentic Italian pizza and halal kebabs in the heart of Pavia. Fresh ingredients, traditional recipes, modern quality."
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "home": "Home",
+      "menu": "Menu",
+      "contact": "Contact",
+      "offers": "Offers"
+    },
+    "contactInfo": {
+      "title": "Contact",
+      "address": "Corso Cairoli 51, Pavia, 27100",
+      "phone": "+39 0382 458734",
+      "hours": "Open every day 10:00 - 01:00"
+    },
+    "orderOnline": "Order via:",
+    "certificationBadge": "100% Halal Certified"
+  }
+}

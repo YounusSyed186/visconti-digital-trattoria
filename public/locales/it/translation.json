@@ -1,0 +1,105 @@
+{
+  "heroSection": {
+    "title": "Visconti",
+    "subtitle": "Pizzeria Kebab",
+    "tagline": "Pizza Italiana Autentica & Kebab Halal a Pavia",
+    "orderOnline": "Ordina Online",
+    "viewMenu": "Visualizza Menu Completo",
+    "orderVia": "Ordina tramite:",
+    "platforms": {
+      "justEat": "JustEat",
+      "deliveroo": "Deliveroo"
+    }
+  },
+  "aboutSection": {
+    "heading": "Benvenuti da Visconti",
+    "description": "Visconti Pizzeria Kebab unisce i sapori senza tempo dell'Italia con il gusto autentico dei kebab. Situati nel cuore di Pavia, serviamo pizze fresche certificate Halal, kebab, panini e altro — tutti preparati con passione e tradizione.",
+    "stats": {
+      "yearsExperience": {
+        "label": "Anni di Esperienza",
+        "value": "15+"
+      },
+      "halalCertified": {
+        "label": "Certificazione Halal",
+        "value": "100%"
+      }
+    },
+    "features": {
+      "authItalianRecipes": "Ricette Italiane Autentiche",
+      "freshKebabs": "Kebab Halal Freschi",
+      "fastDelivery": "Consegna Veloce",
+      "premiumQuality": "Qualità Premium",
+      "badge": "Preparato Fresco Ogni Giorno"
+    }
+  },
+  "menuSection": {
+    "heading": "Il Nostro Menu",
+    "subheading": "Scopri i nostri piatti autentici, preparati con ingredienti freschi e passione italiana",
+    "seeFullMenuButton": "Vedi Menu Completo",
+    "tabs": {
+      "pizze-tradizionali": "🍕 Pizze Tradizionali",
+      "pizze-speciali": "⭐ Pizze Speciali",
+      "calzoni": "🥟 Calzoni",
+      "kebab-panini": "🥙 Kebab & Panini",
+      "burgers": "🍔 Burger & Contorni",
+      "bibite": "🥤 Bibite"
+    },
+    "showFullMenuButton": "Mostra Menu Completo"
+  },
+  "menuListingPage": {
+    "backButton": "Indietro",
+    "menuItems": {
+      "defaultHeading": "Piatti del Menu"
+    }
+  },
+  "contactSection": {
+    "heading": "Contatti & Posizione",
+    "subheading": "Vieni a trovarci nel cuore di Pavia",
+    "contactInfo": {
+      "title": "Informazioni di Contatto",
+      "address": {
+        "label": "Indirizzo",
+        "value": "Corso Cairoli 51, Pavia, 27100, Italia"
+      },
+      "phone": {
+        "label": "Telefono",
+        "value": "+39 0382 458734"
+      },
+      "hours": {
+        "label": "Orari di Apertura",
+        "value": "Tutti i giorni: 10:00 - 01:00"
+      },
+      "orderOnline": {
+        "title": "Ordina Online",
+        "justEat": "JustEat",
+        "deliveroo": "Deliveroo"
+      },
+      "freeDelivery": {
+        "title": "Consegna Gratuita",
+        "description": "Consegna gratuita per ordini superiori a €8. Sotto €8, costo consegna €2"
+      },
+      "directions": "Indicazioni"
+    }
+  },
+  "footer": {
+    "brand": {
+      "name": "Visconti Pizzeria Kebab",
+      "description": "Pizza italiana autentica e kebab halal nel cuore di Pavia. Ingredienti freschi, ricette tradizionali, qualità moderna."
+    },
+    "quickLinks": {
+      "title": "Link Rapidi",
+      "home": "Home",
+      "menu": "Menu",
+      "contact": "Contatti",
+      "offers": "Offerte"
+    },
+    "contactInfo": {
+      "title": "Contatti",
+      "address": "Corso Cairoli 51, Pavia, 27100",
+      "phone": "+39 0382 458734",
+      "hours": "Aperto tutti i giorni 10:00 - 01:00"
+    },
+    "orderOnline": "Ordina tramite:",
+    "certificationBadge": "100% Certificato Halal"
+  }
+}

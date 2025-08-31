@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { IconLeft } from "react-day-picker";
 
 interface MenuImage {
   _id: string;
@@ -52,6 +53,9 @@ const PhysicalMenuCarousel = () => {
 
   return (
     <div className="max-w-4xl mx-auto py-12 px-4 relative">
+      <Button onClick={() => navigate('/')} className="mb-4 bg-gray-200 text-black hover:bg-gray-400">
+        <IconLeft></IconLeft>
+        Home</Button>
       <div className="relative h-96 overflow-hidden rounded-lg">
         <img
           src={currentImage.imageUrl}
@@ -70,6 +74,9 @@ const PhysicalMenuCarousel = () => {
       <div className="flex justify-between mt-4">
         <Button onClick={handlePrev} className="bg-gray-200 text-black hover:bg-gray-400">
           Prev
+        </Button>
+        <Button onClick={() => navigate('/menu')} className="bg-gold text-black hover:bg-gold-dark">
+          View Online Menu
         </Button>
         <Button onClick={handleNext} className="bg-gray-200 text-black hover:bg-gray-400">
           Next
