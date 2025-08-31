@@ -1,5 +1,10 @@
 [[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
-force = true
+  from = "/app/*"          # SPA routes
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/static/*"       # allow static assets
+  to = "/static/:splat"
+  status = 200
