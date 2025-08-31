@@ -50,7 +50,7 @@ const HeroSection = () => {
           <Button 
             variant="outline" 
             size="lg"
-            onClick={() => navigate('/menu')}
+            onClick={() => navigate('/menuPhy')}
             className="border-2 border-gold text-gold hover:bg-gold hover:text-black font-semibold px-8 py-4 text-lg transition-all duration-300 transform hover:scale-105"
           >
             📋 View Full Menu

@@ -17,7 +17,7 @@ const Menu = () => {
     const fetchMenuItems = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}api/menu`);
-        
+
         if (response.data && response.data.groupedItems && typeof response.data.groupedItems === 'object') {
           setMenuItems(response.data.groupedItems);
         } else {
@@ -35,7 +35,7 @@ const Menu = () => {
 
   const tabLabels = {
     "pizze-tradizionali": "🍕 Pizze Tradizionali",
-    "pizze-speciali": "⭐ Pizze Speciali", 
+    "pizze-speciali": "⭐ Pizze Speciali",
     "calzoni": "🥟 Calzoni",
     "kebab-panini": "🥙 Kebab & Panini",
     "burgers": "🍔 Burgers & Sides",
@@ -77,8 +77,8 @@ const Menu = () => {
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header with back button */}
         <div className="flex items-center mb-8">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => navigate(-1)}
             className="flex items-center mr-4"
           >
@@ -115,7 +115,7 @@ const Menu = () => {
                   <Card key={index} className="bg-card/80 backdrop-blur-sm border-border hover:border-gold/50 transition-all duration-300 hover:shadow-warm group overflow-hidden">
                     <div className="relative h-48 overflow-hidden">
                       <img
-                        src={item.image}
+                        src={item.image || item.imageUrl || "/placeholder.png"}
                         alt={item.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         onError={(e) => {

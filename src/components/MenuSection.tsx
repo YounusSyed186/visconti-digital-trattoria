@@ -16,11 +16,10 @@ const MenuSection = () => {
     const fetchMenuItems = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}api/menu`);
-        console.log('Fetched menu items:', response.data); // Log the data to check its structure
+        console.log('Fetched menu items:', response.data);
 
-        // Check if the response contains the expected structure
-        if (response.data && response.data.groupedItems && typeof response.data.groupedItems === 'object') {
-          setMenuItems(response.data.groupedItems); // Set groupedItems as the menu data
+        if (response.data && response.data.groupedItems) {
+          setMenuItems(response.data.groupedItems);
         } else {
           setError('API response is not in the expected format');
         }
@@ -33,6 +32,7 @@ const MenuSection = () => {
 
     fetchMenuItems();
   }, []);
+
 
   // Define the labels for the tabs based on categories
   const tabLabels = {
@@ -94,7 +94,7 @@ const MenuSection = () => {
                   <Card key={index} className="bg-card/80 backdrop-blur-sm border-border hover:border-gold/50 transition-all duration-300 hover:shadow-warm group overflow-hidden">
                     <div className="relative h-48 overflow-hidden">
                       <img
-                        src={item.image}
+                         src={item.image || item.imageUrl || "/placeholder.png"}
                         alt={item.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         onError={(e) => {

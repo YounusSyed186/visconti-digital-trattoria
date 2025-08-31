@@ -11,8 +11,8 @@ import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import MenuManagement from "./pages/admin/MenuManagement";
 import { DayPickerProvider } from "react-day-picker";
-import MenuListingPage from "./components/MoreMenu";
 import FullMenuPage from "./components/MoreMenu";
+import PhysicalMenuCarousel from "./components/Physicalmenu";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +34,7 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/menu" element={<Menu />} />
               <Route path="/menu/full/:category" element={<FullMenuPage />} />
+              <Route path="/menuPhy" element={<PhysicalMenuCarousel />} />
               
               {/* Admin Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
