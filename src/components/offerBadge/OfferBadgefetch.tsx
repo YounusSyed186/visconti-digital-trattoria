@@ -6,7 +6,7 @@ type Offer = {
   title: string;
   description?: string;
   discount: number;
-  expiryDate: string;   // ✅ use backend field
+  expiryDate: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -18,24 +18,38 @@ export default function OfferBadgeFetcher() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URI}api/offer-badges`)
+    fetch(`${import.meta.env.VITE_BACKEND_URI}api/offer-badges`) // ✅ route corrected
       .then(async (res) => {
         if (!res.ok) throw new Error("Failed to fetch offers");
         return await res.json();
       })
       .then((data: Offer[]) => {
-        // ✅ pick first active + not expired offer
         const now = new Date();
         const active = data.find(
           (o) => o.isActive && new Date(o.expiryDate) > now
         );
-        if (active) setOffer(active);
+        if (active) {
+          setOffer(active);
+
+          // ✅ store discount & expiry in localStorage
+          localStorage.setItem(
+            "activeOffer",
+            JSON.stringify({
+              discount: active.discount,
+              expiryDate: active.expiryDate,
+              title: active.title,
+            })
+          );
+        } else {
+          // clear if no active offer
+          localStorage.removeItem("activeOffer");
+        }
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading || error || !offer) return null; // fail silent if no offers
+  if (loading || error || !offer) return null;
 
   return (
     <OfferBadge
@@ -43,7 +57,7 @@ export default function OfferBadgeFetcher() {
       offer={{
         name: offer.title,
         occasion: offer.description ?? "",
-        date: offer.expiryDate, // ✅ use expiryDate from backend
+        date: offer.expiryDate,
         discount: offer.discount,
       }}
     />
