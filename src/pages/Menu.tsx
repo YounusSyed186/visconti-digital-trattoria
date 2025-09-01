@@ -2,22 +2,41 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ChefHat, Utensils, Star, Pizza } from 'lucide-react';
 
 const Menu = () => {
-  const [activeTab, setActiveTab] = useState<string>("pizze-tradizionali");
+  const [activeTab, setActiveTab] = useState<string>("all");
   const [menuItems, setMenuItems] = useState<{ [key: string]: any[] }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const tabLabels = {
+    all: "All",
+    "pizze-tradizionali": "Traditional",
+    "pizze-speciali": "Specialty",
+    calzoni: "Calzones",
+    "kebab-panini": "Kebab",
+    burgers: "Burgers",
+    bibite: "Drinks",
+  };
+
+  const tabIcons = {
+    all: <Utensils className="w-4 h-4" />,
+    "pizze-tradizionali": <Pizza className="w-4 h-4" />,
+    "pizze-speciali": <Star className="w-4 h-4" />,
+    calzoni: <ChefHat className="w-4 h-4" />,
+    "kebab-panini": <Utensils className="w-4 h-4" />,
+    burgers: <Utensils className="w-4 h-4" />,
+    bibite: <Utensils className="w-4 h-4" />,
+  };
+
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}api/menu`);
-
         if (response.data && response.data.groupedItems && typeof response.data.groupedItems === 'object') {
           setMenuItems(response.data.groupedItems);
         } else {
@@ -29,117 +48,132 @@ const Menu = () => {
         setLoading(false);
       }
     };
-
     fetchMenuItems();
   }, []);
 
-  const tabLabels = {
-    "pizze-tradizionali": "🍕 Pizze Tradizionali",
-    "pizze-speciali": "⭐ Pizze Speciali",
-    "calzoni": "🥟 Calzoni",
-    "kebab-panini": "🥙 Kebab & Panini",
-    "burgers": "🍔 Burgers & Sides",
-    "bibite": "🥤 Bibite",
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading menu...</p>
-        </div>
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-warm-50">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
+        <p className="text-warm-700">Loading our delicious menu...</p>
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <p className="text-destructive mb-4">{error}</p>
-          <Button onClick={() => navigate('/')}>Go Back Home</Button>
-        </div>
+  if (error) return (
+    <div className="min-h-screen flex items-center justify-center bg-warm-50">
+      <div className="text-center">
+        <p className="text-red-600 mb-4">{error}</p>
+        <Button onClick={() => navigate('/')} className="bg-amber-600 hover:bg-amber-700">
+          Go Back Home
+        </Button>
       </div>
-    );
-  }
+    </div>
+  );
+
+  // For "All" tab, merge all items
+  const allItems = Object.values(menuItems).flat();
 
   return (
-    <div className="min-h-screen py-12 md:py-20 px-4 bg-background relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-1/4 left-1/3 text-7xl md:text-9xl">🍕</div>
-        <div className="absolute bottom-1/3 right-1/4 text-6xl md:text-8xl">🥙</div>
-        <div className="absolute top-2/3 left-1/4 text-5xl md:text-7xl">🍔</div>
-        <div className="absolute top-1/2 right-1/3 text-6xl md:text-8xl">🥤</div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-warm-50 to-warm-100 py-4 md:py-8 px-3 sm:px-4 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-amber-200 rounded-full -translate-y-12 md:-translate-y-16 translate-x-12 md:translate-x-16 opacity-50"></div>
+      <div className="absolute bottom-0 left-0 w-32 h-32 md:w-40 md:h-40 bg-amber-300 rounded-full -translate-x-16 md:-translate-x-20 translate-y-16 md:translate-y-20 opacity-30"></div>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Header with back button */}
-        <div className="flex items-center mb-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-center mb-6 md:mb-8 gap-4">
           <Button
-            variant="outline"
             onClick={() => navigate(-1)}
-            className="flex items-center mr-4"
+            className="flex items-center bg-amber-600 hover:bg-amber-700 text-white self-start sm:self-auto"
+            size="sm"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
           </Button>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gold">
-            La Nostra Menu Completa
-          </h1>
+          <div className="flex-1 text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-warm-900 font-serif">
+              Our Menu
+            </h1>
+            <p className="text-warm-700 mt-1 sm:mt-2 text-sm sm:text-base max-w-2xl mx-auto">
+              Discover our authentic Italian flavors and specialties
+            </p>
+          </div>
+          <div className="hidden sm:block w-20"></div> {/* Spacer for balance */}
         </div>
 
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-12">
-          Esplora la nostra selezione completa di pizze tradizionali, specialità, kebab e molto altro
-        </p>
-
-        {/* Menu Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="flex w-full overflow-x-auto pb-2 mb-8 bg-card border border-border rounded-md">
-            {Object.entries(tabLabels).map(([key, label]) => (
-              <TabsTrigger
-                key={key}
-                value={key}
-                className="flex-shrink-0 px-3 py-2 text-xs sm:text-sm data-[state=active]:bg-gold data-[state=active]:text-black font-medium"
-              >
-                {label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          {Object.entries(menuItems).map(([category, items]) => (
-            <TabsContent key={category} value={category}>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {Array.isArray(items) && items.map((item, index) => (
-                  <Card key={index} className="bg-card/80 backdrop-blur-sm border-border hover:border-gold/50 transition-all duration-300 hover:shadow-warm group overflow-hidden">
-                    <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={item.image || item.imageUrl || "/placeholder.png"}
-                        alt={item.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        onError={(e) => {
-                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300' fill='none'%3E%3Crect width='400' height='300' fill='%23F4F4F5'/%3E%3Cpath d='M200 150L150 120L100 150L150 180L200 150Z' fill='%23E5E5E5'/%3E%3Cpath d='M250 120L200 150L250 180L300 150L250 120Z' fill='%23E5E5E5'/%3E%3C/svg%3E";
-                        }}
-                      />
-                      <div className="absolute top-4 right-4 bg-gold text-black font-bold py-1 px-2 rounded-md text-sm">
-                        {item.price}
-                      </div>
-                    </div>
-                    <CardContent className="p-4 sm:p-6">
-                      <h3 className="font-serif font-semibold text-base sm:text-lg text-foreground group-hover:text-gold transition-colors mb-2">
-                        {item.name}
-                      </h3>
-                      <p className="text-muted-foreground text-sm leading-relaxed">
-                        {item.description}
-                      </p>
-                    </CardContent>
-                  </Card>
+        {/* Tabs Navigation */}
+        <div className="mb-6 md:mb-8">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            {/* TabsList as Responsive Grid */}
+            <div className="overflow-x-auto pb-2">
+              <TabsList className="inline-flex min-w-max bg-transparent p-1">
+                {Object.entries(tabLabels).map(([key, label]) => (
+                  <TabsTrigger
+                    key={key}
+                    value={key}
+                    className="flex flex-col sm:flex-row items-center justify-center px-3 py-2 rounded-full 
+                       text-xs sm:text-sm font-medium text-warm-800  border border-amber-200 
+                       data-[state=active]:bg-amber-600 data-[state=active]:text-white 
+                       whitespace-nowrap transition-colors mx-1 min-w-[70px]"
+                  >
+                    <span className="mb-1 sm:mb-0 sm:mr-1 md:mr-2">{tabIcons[key as keyof typeof tabIcons]}</span>
+                    <span className="hidden xs:inline">{label}</span>
+                  </TabsTrigger>
                 ))}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
+              </TabsList>
+            </div>
+
+            {/* Menu Items Grid */}
+            {Object.entries({ all: allItems, ...menuItems }).map(([category, items]) => (
+              <TabsContent key={category} value={category} className="mt-4 sm:mt-6">
+                <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {Array.isArray(items) && items.map((item, index) => (
+                    <Card
+                      key={index}
+                      className="overflow-hidden border-0 shadow-md hover:shadow-xl 
+                         transition-all duration-300 bg-black group h-full flex flex-col"
+                    >
+                      <div className="relative h-36 sm:h-40 md:h-48 overflow-hidden">
+                        <img
+                          src={item.image || item.imageUrl || "/placeholder-food.jpg"}
+                          alt={item.name}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          onError={(e) => { e.currentTarget.src = "/placeholder-food.jpg"; }}
+                        />
+                        <div className="absolute top-2 right-2 bg-amber-600 text-white font-bold py-1 px-2 rounded-full text-xs shadow-md">
+                          {item.price}
+                        </div>
+                      </div>
+                      <CardContent className="p-3 sm:p-4 flex-grow">
+                        <h3 className="font-bold text-sm sm:text-base text-warm-900 group-hover:text-amber-700 transition-colors mb-1 sm:mb-2 line-clamp-1">
+                          {item.name}
+                        </h3>
+                        <p className="text-warm-700 text-xs sm:text-sm leading-relaxed line-clamp-2 sm:line-clamp-3">
+                          {item.description}
+                        </p>
+                      </CardContent>
+                      <CardFooter className="p-3 sm:p-4 pt-0">
+                        <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm">
+                          Add to Order
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
+        </div>
+
+        {/* Footer CTA */}
+        <div className="bg-amber-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-center text-white mb-6 md:mb-8">
+          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-3">Ready to order?</h2>
+          <p className="mb-3 md:mb-4 text-sm md:text-base max-w-2xl mx-auto">Experience the authentic taste of Italy delivered right to your door</p>
+          <Button size="lg" className="bg-white text-amber-700 hover:bg-warm-100 text-sm md:text-base">
+            Place Your Order Now
+          </Button>
+        </div>
       </div>
     </div>
   );

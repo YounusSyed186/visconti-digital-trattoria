@@ -30,7 +30,6 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/menu" element={<Menu />} />
-              <Route path="/menu/full/:category" element={<FullMenuPage />} />
               <Route path="/menuPhy" element={<PhysicalMenuCarousel />} />
               
               {/* Admin Routes */}

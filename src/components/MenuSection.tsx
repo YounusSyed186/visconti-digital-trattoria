@@ -15,7 +15,7 @@ const MenuSection = () => {
     const fetchMenuItems = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}api/menu`);
-        
+        console.log('API response:', response.data);
         if (response.data && response.data.groupedItems) {
           // Flatten all menu items from all categories into a single array
           const allItems: any[] = [];
