@@ -8,8 +8,9 @@ const MenuSection = () => {
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -40,72 +41,45 @@ const MenuSection = () => {
   useEffect(() => {
     if (menuItems.length === 0) return;
     
-    // Set up auto-scroll
-    const scrollContainer = scrollContainerRef.current;
-    if (!scrollContainer) return;
-    
-    let scrollInterval: NodeJS.Timeout;
-    let scrollDirection = 1; // 1 for right, -1 for left
-    let scrollSpeed = 1; // Pixels per interval
-    let isPaused = false;
-    
-    const startScrolling = () => {
-      scrollInterval = setInterval(() => {
-        if (scrollContainer && !isPaused) {
-          // Check if we've reached the end or beginning
-          const isAtEnd = scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.offsetWidth - 5;
-          const isAtStart = scrollContainer.scrollLeft <= 5;
-          
-          if (isAtEnd) {
-            scrollDirection = -1;
-          } else if (isAtStart) {
-            scrollDirection = 1;
-          }
-          
-          scrollContainer.scrollBy({
-            left: scrollDirection * scrollSpeed,
-            behavior: 'auto'
-          });
-        }
-      }, 30);
-    };
-    
-    startScrolling();
-    
-    // Pause on hover
-    const pauseScroll = () => {
-      isPaused = true;
-    };
-    
-    const resumeScroll = () => {
-      isPaused = false;
-    };
-    
-    scrollContainer.addEventListener('mouseenter', pauseScroll);
-    scrollContainer.addEventListener('mouseleave', resumeScroll);
-    
-    // Handle touch events for mobile
-    const handleTouchStart = () => {
-      clearInterval(scrollInterval);
-    };
-    
-    const handleTouchEnd = () => {
-      startScrolling();
-    };
-    
-    scrollContainer.addEventListener('touchstart', handleTouchStart);
-    scrollContainer.addEventListener('touchend', handleTouchEnd);
+    // Set up auto-slide
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prevIndex) => 
+        prevIndex === menuItems.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000); // Change card every 4 seconds
     
     return () => {
-      clearInterval(scrollInterval);
-      if (scrollContainer) {
-        scrollContainer.removeEventListener('mouseenter', pauseScroll);
-        scrollContainer.removeEventListener('mouseleave', resumeScroll);
-        scrollContainer.removeEventListener('touchstart', handleTouchStart);
-        scrollContainer.removeEventListener('touchend', handleTouchEnd);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
       }
     };
   }, [menuItems]);
+
+  const goToNext = () => {
+    setCurrentIndex(currentIndex === menuItems.length - 1 ? 0 : currentIndex + 1);
+    resetInterval();
+  };
+
+  const goToPrevious = () => {
+    setCurrentIndex(currentIndex === 0 ? menuItems.length - 1 : currentIndex - 1);
+    resetInterval();
+  };
+
+  const goToSlide = (slideIndex: number) => {
+    setCurrentIndex(slideIndex);
+    resetInterval();
+  };
+
+  const resetInterval = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prevIndex) => 
+        prevIndex === menuItems.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000);
+  };
 
   const handleShowFullMenu = (): void => {
     navigate('/menu');
@@ -134,7 +108,7 @@ const MenuSection = () => {
 
   return (
     <section id="menu" className="py-12 md:py-20 px-4 bg-gradient-to-b from-background to-amber-900 relative overflow-hidden">
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gold mb-4">
             Il Nostro Menu
@@ -144,18 +118,19 @@ const MenuSection = () => {
           </p>
         </div>
 
-        {/* Menu Items with Auto Scrolling */}
-        <div className="relative">
-          <div 
-            ref={scrollContainerRef}
-            className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory py-4"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            <div className="flex space-x-4 md:space-x-8 px-4">
-              {menuItems.map((item) => (
-                <div key={item._id || item.id} className="snap-start flex-shrink-0 w-64 md:w-80">
-                  <Card className="glass-card hover-lift group border-0 shadow-elegant overflow-hidden rounded-2xl md:rounded-3xl">
-                    <div className="relative h-48 md:h-52 overflow-hidden">
+        {/* Menu Items with Sliding Animation */}
+        <div className="relative h-96 md:h-[500px] w-full overflow-hidden rounded-2xl">
+          <div className="relative h-full w-full">
+            {menuItems.map((item, index) => (
+              <div
+                key={item._id || item.id}
+                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                  index === currentIndex ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                <div className="flex justify-center items-center h-full px-4">
+                  <Card className="glass-card hover-lift group border-0 shadow-elegant overflow-hidden rounded-3xl w-full max-w-md">
+                    <div className="relative h-64 md:h-72 overflow-hidden">
                       <img
                         src={item.image || item.imageUrl || "/placeholder.png"}
                         alt={item.name}
@@ -165,30 +140,63 @@ const MenuSection = () => {
                         }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent group-hover:from-black/10 transition-all duration-300"></div>
-                      <div className="absolute top-3 right-3 bg-gradient-gold text-black font-bold py-2 px-3 md:py-3 md:px-4 rounded-xl text-sm md:text-lg shadow-gold hover-glow">
+                      <div className="absolute top-4 right-4 bg-gradient-gold text-black font-bold py-3 px-4 rounded-xl text-lg shadow-gold hover-glow">
                         {item.price} €
                       </div>
-                      <div className="absolute bottom-3 left-3 glass-card px-2 py-1 md:px-3 md:py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                        <span className="text-xs text-gold font-medium">👀 View Details</span>
-                      </div>
                     </div>
-                    <CardContent className="p-4 md:p-6">
-                      <h3 className="font-serif font-bold text-lg md:text-xl text-foreground group-hover:text-gold transition-colors mb-2 md:mb-3 line-clamp-1">
+                    <CardContent className="p-6">
+                      <h3 className="font-serif font-bold text-xl text-foreground group-hover:text-gold transition-colors mb-3 text-center">
                         {item.name}
                       </h3>
-                      <p className="text-muted-foreground text-xs md:text-sm leading-relaxed line-clamp-2 group-hover:text-foreground/80 transition-colors">
+                      <p className="text-muted-foreground text-sm leading-relaxed group-hover:text-foreground/80 transition-colors text-center">
                         {item.description}
                       </p>
                     </CardContent>
                   </Card>
                 </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Slider controls */}
+          <button
+            onClick={goToPrevious}
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-gold p-3 rounded-full hover:bg-black/70 transition-colors z-20"
+            aria-label="Previous dish"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            onClick={goToNext}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-gold p-3 rounded-full hover:bg-black/70 transition-colors z-20"
+            aria-label="Next dish"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          {/* Dots indicator */}
+          <div className="absolute bottom-4 left-0 right-0">
+            <div className="flex items-center justify-center gap-2">
+              {menuItems.map((_, slideIndex) => (
+                <button
+                  key={slideIndex}
+                  onClick={() => goToSlide(slideIndex)}
+                  className={`h-3 rounded-full transition-all duration-300 ${
+                    slideIndex === currentIndex ? 'w-8 bg-gold' : 'w-3 bg-gray-300'
+                  }`}
+                  aria-label={`Go to dish ${slideIndex + 1}`}
+                />
               ))}
             </div>
           </div>
         </div>
 
         {/* Show Full Menu Button */}
-        <div className="text-center mt-12 md:mt-16">
+        <div className="text-center mt-16">
           <Button
             onClick={handleShowFullMenu}
             variant="premium"
@@ -203,18 +211,6 @@ const MenuSection = () => {
           </Button>
         </div>
       </div>
-
-      <style>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .snap-x {
-          scroll-snap-type: x mandatory;
-        }
-        .snap-start {
-          scroll-snap-align: start;
-        }
-      `}</style>
     </section>
   );
 };
