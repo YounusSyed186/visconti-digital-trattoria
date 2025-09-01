@@ -131,29 +131,33 @@ const MenuSection = () => {
             <div className="flex space-x-8 px-4">
               {menuItems.map((item) => (
                 <div key={item._id || item.id} className="snap-start flex-shrink-0 w-80">
-                  <Card className="text-3xl font-bold text-stone-800 border-b-2 border-amber-600 pb-1 hover:shadow-lg transition-shadow duration-300 group">
-                    <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={item.image || item.imageUrl || "/placeholder.png"}
-                        alt={item.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        onError={(e) => {
-                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300' fill='none'%3E%3Crect width='400' height='300' fill='%23F4F4F5'/%3E%3Cpath d='M200 150L150 120L100 150L150 180L200 150Z' fill='%23E5E5E5'/%3E%3Cpath d='M250 120L200 150L250 180L300 150L250 120Z' fill='%23E5E5E5'/%3E%3C/svg%3E";
-                        }}
-                      />
-                      <div className="absolute top-4 right-4 bg-gold text-black font-bold py-2 px-3 rounded-md text-lg shadow-md">
-                        {item.price} €
-                      </div>
+                <Card className="glass-card hover-lift group border-0 shadow-elegant overflow-hidden">
+                  <div className="relative h-52 overflow-hidden">
+                    <img
+                      src={item.image || item.imageUrl || "/placeholder.png"}
+                      alt={item.name}
+                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110"
+                      onError={(e) => {
+                        e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300' fill='none'%3E%3Crect width='400' height='300' fill='%23F4F4F5'/%3E%3Cpath d='M200 150L150 120L100 150L150 180L200 150Z' fill='%23E5E5E5'/%3E%3Cpath d='M250 120L200 150L250 180L300 150L250 120Z' fill='%23E5E5E5'/%3E%3C/svg%3E";
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent group-hover:from-black/10 transition-all duration-300"></div>
+                    <div className="absolute top-4 right-4 bg-gradient-gold text-black font-bold py-3 px-4 rounded-xl text-lg shadow-gold hover-glow">
+                      {item.price} €
                     </div>
-                    <CardContent className="p-5">
-                      <h3 className="font-serif font-bold text-xl text-foreground group-hover:text-gold transition-colors mb-3">
-                        {item.name}
-                      </h3>
-                      <p className="text-muted-foreground text-base leading-relaxed">
-                        {item.description}
-                      </p>
-                    </CardContent>
-                  </Card>
+                    <div className="absolute bottom-4 left-4 glass-card px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                      <span className="text-xs text-gold font-medium">👀 View Details</span>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="font-serif font-bold text-xl text-foreground group-hover:text-gold transition-colors mb-3 line-clamp-1">
+                      {item.name}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 group-hover:text-foreground/80 transition-colors">
+                      {item.description}
+                    </p>
+                  </CardContent>
+                </Card>
                 </div>
               ))}
             </div>
@@ -161,12 +165,18 @@ const MenuSection = () => {
         </div>
 
         {/* Show Full Menu Button */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-16">
           <Button
             onClick={handleShowFullMenu}
-            className="bg-gradient-to-r from-gold to-amber-600 text-white hover:from-black hover:to-gold font-medium py-4 px-10 rounded-full transition-all duration-300 text-lg shadow-lg hover:shadow-xl"
+            variant="premium"
+            size="xl"
+            className="group relative overflow-hidden"
           >
-            Vedi Menu Completo
+            <span className="relative z-10 flex items-center gap-3">
+              <span className="text-xl group-hover:animate-bounce">📋</span>
+              Vedi Menu Completo
+              <span className="text-xl group-hover:animate-bounce">🍽️</span>
+            </span>
           </Button>
         </div>
       </div>

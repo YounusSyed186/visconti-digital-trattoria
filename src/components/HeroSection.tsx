@@ -21,45 +21,59 @@ const HeroSection = () => {
       <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gold/20 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-wine/30 rounded-full blur-2xl animate-pulse delay-1000"></div>
       
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-6xl md:text-7xl font-serif font-bold text-gold mb-4 animate-glow">
+      <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
+        <div className="mb-8 animate-on-scroll">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-gradient-gold mb-6 animate-glow leading-tight">
             {t("heroSection.title")}
           </h1>
-          <p className="text-2xl md:text-3xl font-light text-warm-white tracking-wider">
+          <div className="w-32 h-1 bg-gradient-gold mx-auto mb-6 rounded-full"></div>
+          <p className="text-2xl md:text-4xl font-light text-warm-white tracking-wider animate-on-scroll delay-100">
             {t("heroSection.subtitle")}
           </p>
         </div>
 
-        <p className="text-xl md:text-2xl text-warm-white/90 mb-12 font-light leading-relaxed">
+        <p className="text-xl md:text-2xl text-warm-white/90 mb-12 font-light leading-relaxed max-w-3xl mx-auto animate-on-scroll delay-200">
           {t("heroSection.tagline")}
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-on-scroll delay-300">
           <Button 
-            size="lg" 
-            className="bg-gradient-gold hover:bg-gold-dark text-black font-semibold px-8 py-4 text-lg shadow-gold hover:shadow-warm transition-all duration-300 transform hover:scale-105"
+            variant="premium"
+            size="xl"
+            className="group relative overflow-hidden"
           >
-            🛵 {t("heroSection.orderOnline")}
+            <span className="relative z-10 flex items-center gap-3">
+              <span className="text-2xl group-hover:animate-bounce">🛵</span>
+              {t("heroSection.orderOnline")}
+            </span>
           </Button>
           <Button 
-            variant="outline" 
-            size="lg"
+            variant="glass" 
+            size="xl"
             onClick={() => navigate('/menuPhy')}
-            className="border-2 border-gold text-gold hover:bg-gold hover:text-black font-semibold px-8 py-4 text-lg transition-all duration-300 transform hover:scale-105"
+            className="border-2 border-gold/50 text-gold hover:bg-gold/10 hover:border-gold group"
           >
-            📋 {t("heroSection.viewMenu")}
+            <span className="flex items-center gap-3">
+              <span className="text-xl group-hover:scale-110 transition-transform">📋</span>
+              {t("heroSection.viewMenu")}
+            </span>
           </Button>
         </div>
 
-        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 text-warm-white/80">
-          <span className="text-sm font-medium">{t("heroSection.orderVia")}</span>
+        <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 text-warm-white/80 animate-on-scroll delay-300">
+          <span className="text-base font-medium">{t("heroSection.orderVia")}</span>
           <div className="flex gap-4">
-            <span className="px-3 py-1 bg-white/10 rounded-full text-sm font-medium backdrop-blur-sm">
-              {t("heroSection.platforms.justEat")}
+            <span className="px-6 py-3 glass-card rounded-full text-sm font-medium hover-glow cursor-pointer group">
+              <span className="flex items-center gap-2">
+                <span className="group-hover:scale-110 transition-transform">📱</span>
+                {t("heroSection.platforms.justEat")}
+              </span>
             </span>
-            <span className="px-3 py-1 bg-white/10 rounded-full text-sm font-medium backdrop-blur-sm">
-              {t("heroSection.platforms.deliveroo")}
+            <span className="px-6 py-3 glass-card rounded-full text-sm font-medium hover-glow cursor-pointer group">
+              <span className="flex items-center gap-2">
+                <span className="group-hover:scale-110 transition-transform">🛵</span>
+                {t("heroSection.platforms.deliveroo")}
+              </span>
             </span>
           </div>
         </div>
