@@ -191,11 +191,11 @@ const Menu = () => {
                             {/* Price with discount */}
                             {discountedPrice ? (
                               <div className="mt-2">
-                                <p className="text-xs text-red-500 line-through">£{originalPrice}</p>
-                                <p className="font-semibold text-amber-600">£{discountedPrice}</p>
+                                <p className="text-xs text-red-500 line-through">€{originalPrice}</p>
+                                <p className="font-semibold text-amber-600">€{discountedPrice}</p>
                               </div>
                             ) : (
-                              <p className="mt-2 font-semibold text-amber-600">£{originalPrice}</p>
+                              <p className="mt-2 font-semibold text-amber-600">€{originalPrice}</p>
                             )}
                           </CardContent>
 
