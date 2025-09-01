@@ -19,59 +19,64 @@ const MenuListingPage = () => {
   }
 
   return (
-    <div className="min-h-screen py-12 md:py-20 px-4 bg-background relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-1/4 left-1/3 text-7xl md:text-9xl">🍕</div>
-        <div className="absolute bottom-1/3 right-1/4 text-6xl md:text-8xl">🥙</div>
-      </div>
-
-      <div className="max-w-6xl mx-auto relative z-10">
+    <div className="min-h-screen py-8 px-4 bg-stone-100 relative">
+      <div className="max-w-4xl mx-auto relative">
         {/* Header with back button */}
-        <div className="flex items-center mb-8">
+        <div className="flex items-center mb-6">
           <Button 
             variant="outline" 
             onClick={() => navigate(-1)}
-            className="flex items-center mr-4"
+            className="flex items-center mr-4 bg-white"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
           </Button>
-          <h1 className="text-3xl md:text-4xl font-serif font-bold text-gold">
+          <h1 className="text-3xl font-bold text-stone-800 border-b-2 border-amber-600 pb-1">
             {categoryLabel || "Menu Items"}
           </h1>
         </div>
 
         {/* Menu Items Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-6">
           {items.map((item: MenuItem, index: number) => (
             <Card 
               key={index}
-              className="bg-card/80 backdrop-blur-sm border-border hover:border-gold/50 transition-all duration-300 hover:shadow-warm group overflow-hidden"
+              className="bg-white border-none shadow-none overflow-hidden"
             >
-              <div className="relative h-48 overflow-hidden">
-                <img 
-                  src={item.image} 
-                  alt={item.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  onError={(e) => {
-                    e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300' fill='none'%3E%3Crect width='400' height='300' fill='%23F4F4F5'/%3E%3Cpath d='M200 150L150 120L100 150L150 180L200 150Z' fill='%23E5E5E5'/%3E%3Cpath d='M250 120L200 150L250 180L300 150L250 120Z' fill='%23E5E5E5'/%3E%3C/svg%3E";
-                  }}
-                />
-                <div className="absolute top-4 right-4 bg-gold text-black font-bold py-1 px-2 rounded-md text-sm">
-                  {item.price}
+              <CardContent className="p-0 flex">
+                <div className="w-1/3">
+                  <img 
+                    src={item.image} 
+                    alt={item.name}
+                    className="w-full h-40 object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300' fill='none'%3E%3Crect width='400' height='300' fill='%23F4F4F5'/%3E%3Cpath d='M200 150L150 120L100 150L150 180L200 150Z' fill='%23E5E5E5'/%3E%3Cpath d='M250 120L200 150L250 180L300 150L250 120Z' fill='%23E5E5E5'/%3E%3C/svg%3E";
+                    }}
+                  />
                 </div>
-              </div>
-              <CardContent className="p-4 sm:p-6">
-                <h3 className="font-serif font-semibold text-base sm:text-lg text-foreground group-hover:text-gold transition-colors mb-2">
-                  {item.name}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {item.description}
-                </p>
+                <div className="w-2/3 p-4 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold text-stone-800 mb-1">
+                      {item.name}
+                    </h3>
+                    <p className="text-stone-600 text-sm mb-2">
+                      {item.description}
+                    </p>
+                  </div>
+                  <div className="text-amber-700 font-bold text-lg">
+                    {item.price}
+                  </div>
+                </div>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Footer information */}
+        <div className="mt-12 pt-6 border-t border-stone-300 text-center text-stone-600 text-sm">
+          <p>harmmafullahbangash25@gmail.com</p>
+          <p className="my-1">Q335-Q965617</p>
+          <p>123 Anywhere St., Any City</p>
         </div>
       </div>
     </div>
