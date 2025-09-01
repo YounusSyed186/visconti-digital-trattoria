@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ChefHat, Utensils, Star, Pizza } from 'lucide-react';
-import { GiFullPizza } from "react-icons/gi";
+import { GiCupcake, GiFullPizza, GiNoodles, GiSandwich } from "react-icons/gi";
 import { TbPizzaOff } from "react-icons/tb";
 import { MdKebabDining } from "react-icons/md";
 import { GiHamburger } from "react-icons/gi";
@@ -27,6 +27,9 @@ const Menu = () => {
     "kebab-panini": "Kebab",
     burgers: "Burgers",
     bibite: "Drinks",
+    "paidina & panino": "Panini",
+    "Indian cuisine": "Indian",
+    dolco: "Desserts"
   };
 
   const tabIcons = {
@@ -34,10 +37,14 @@ const Menu = () => {
     "pizze-tradizionali": <Pizza className="w-4 h-4" />,
     "pizze-speciali": <TbPizzaOff className="w-4 h-4" />,
     calzoni: <GiFullPizza className="w-4 h-4" />,
-    "kebab-panini": <MdKebabDining  className="w-4 h-4" />,
+    "kebab-panini": <MdKebabDining className="w-4 h-4" />,
     burgers: <GiHamburger className="w-4 h-4" />,
     bibite: <RiDrinksLine className="w-4 h-4" />,
+    "paidina & panino": <GiSandwich className="w-4 h-4" />,   // Panini icon
+    "Indian cuisine": <GiNoodles className="w-4 h-4" />,      // Indian food style
+    dolco: <GiCupcake className="w-4 h-4" />                  // Dessert icon
   };
+
 
   useEffect(() => {
     const fetchMenuItems = async () => {

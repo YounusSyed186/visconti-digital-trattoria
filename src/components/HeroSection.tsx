@@ -58,6 +58,17 @@ const HeroSection = () => {
               {t("heroSection.viewMenu")}
             </span>
           </Button>
+          <Button 
+            variant="glass" 
+            size="xl"
+            onClick={() => navigate('/menu')}
+            className="border-2 border-gold/50 text-gold hover:bg-gold/10 hover:border-gold group"
+          >
+            <span className="flex items-center gap-3">
+              <span className="text-xl group-hover:scale-110 transition-transform">📋</span>
+              {t("heroSection.viewOnlineMenu")}
+            </span>
+          </Button>
         </div>
 
         <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 text-warm-white/80 animate-on-scroll delay-300">
@@ -73,6 +84,11 @@ const HeroSection = () => {
               <span className="flex items-center gap-2">
                 <span className="group-hover:scale-110 transition-transform">🛵</span>
                 {t("heroSection.platforms.deliveroo")}
+              </span>
+            </span>
+            <span className="px-6 py-3 glass-card rounded-full text-sm font-medium hover-glow cursor-pointer group">
+              <span className="flex items-center gap-2">
+                Glovo
               </span>
             </span>
           </div>
