@@ -5,6 +5,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ChefHat, Utensils, Star, Pizza } from 'lucide-react';
+import { GiFullPizza } from "react-icons/gi";
+import { TbPizzaOff } from "react-icons/tb";
+import { MdKebabDining } from "react-icons/md";
+import { GiHamburger } from "react-icons/gi";
+import { RiDrinksLine } from "react-icons/ri";
+
 
 const Menu = () => {
   const [activeTab, setActiveTab] = useState<string>("all");
@@ -26,11 +32,11 @@ const Menu = () => {
   const tabIcons = {
     all: <Utensils className="w-4 h-4" />,
     "pizze-tradizionali": <Pizza className="w-4 h-4" />,
-    "pizze-speciali": <Star className="w-4 h-4" />,
-    calzoni: <ChefHat className="w-4 h-4" />,
-    "kebab-panini": <Utensils className="w-4 h-4" />,
-    burgers: <Utensils className="w-4 h-4" />,
-    bibite: <Utensils className="w-4 h-4" />,
+    "pizze-speciali": <TbPizzaOff className="w-4 h-4" />,
+    calzoni: <GiFullPizza className="w-4 h-4" />,
+    "kebab-panini": <MdKebabDining  className="w-4 h-4" />,
+    burgers: <GiHamburger className="w-4 h-4" />,
+    bibite: <RiDrinksLine className="w-4 h-4" />,
   };
 
   useEffect(() => {
