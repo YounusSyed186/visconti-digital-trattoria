@@ -258,6 +258,15 @@
     transform: scale(1);
   }
 }
+/* Add this to globals.css or tailwind config for gradient animation */
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+}
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 4s ease infinite;
+}
 
 /* Scroll-triggered animations */
 .animate-on-scroll {
