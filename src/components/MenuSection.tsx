@@ -47,14 +47,18 @@ const MenuSection = () => {
     let scrollInterval: NodeJS.Timeout;
     let scrollDirection = 1; // 1 for right, -1 for left
     let scrollSpeed = 1; // Pixels per interval
+    let isPaused = false;
     
     const startScrolling = () => {
       scrollInterval = setInterval(() => {
-        if (scrollContainer) {
+        if (scrollContainer && !isPaused) {
           // Check if we've reached the end or beginning
-          if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.offsetWidth - 5) {
+          const isAtEnd = scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.offsetWidth - 5;
+          const isAtStart = scrollContainer.scrollLeft <= 5;
+          
+          if (isAtEnd) {
             scrollDirection = -1;
-          } else if (scrollContainer.scrollLeft <= 5) {
+          } else if (isAtStart) {
             scrollDirection = 1;
           }
           
@@ -69,17 +73,36 @@ const MenuSection = () => {
     startScrolling();
     
     // Pause on hover
-    const pauseScroll = () => clearInterval(scrollInterval);
-    const resumeScroll = () => startScrolling();
+    const pauseScroll = () => {
+      isPaused = true;
+    };
+    
+    const resumeScroll = () => {
+      isPaused = false;
+    };
     
     scrollContainer.addEventListener('mouseenter', pauseScroll);
     scrollContainer.addEventListener('mouseleave', resumeScroll);
+    
+    // Handle touch events for mobile
+    const handleTouchStart = () => {
+      clearInterval(scrollInterval);
+    };
+    
+    const handleTouchEnd = () => {
+      startScrolling();
+    };
+    
+    scrollContainer.addEventListener('touchstart', handleTouchStart);
+    scrollContainer.addEventListener('touchend', handleTouchEnd);
     
     return () => {
       clearInterval(scrollInterval);
       if (scrollContainer) {
         scrollContainer.removeEventListener('mouseenter', pauseScroll);
         scrollContainer.removeEventListener('mouseleave', resumeScroll);
+        scrollContainer.removeEventListener('touchstart', handleTouchStart);
+        scrollContainer.removeEventListener('touchend', handleTouchEnd);
       }
     };
   }, [menuItems]);
@@ -128,36 +151,36 @@ const MenuSection = () => {
             className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory py-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            <div className="flex space-x-8 px-4">
+            <div className="flex space-x-4 md:space-x-8 px-4">
               {menuItems.map((item) => (
-                <div key={item._id || item.id} className="snap-start flex-shrink-0 w-80">
-                <Card className="glass-card hover-lift group border-0 shadow-elegant overflow-hidden">
-                  <div className="relative h-52 overflow-hidden">
-                    <img
-                      src={item.image || item.imageUrl || "/placeholder.png"}
-                      alt={item.name}
-                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110"
-                      onError={(e) => {
-                        e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300' fill='none'%3E%3Crect width='400' height='300' fill='%23F4F4F5'/%3E%3Cpath d='M200 150L150 120L100 150L150 180L200 150Z' fill='%23E5E5E5'/%3E%3Cpath d='M250 120L200 150L250 180L300 150L250 120Z' fill='%23E5E5E5'/%3E%3C/svg%3E";
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent group-hover:from-black/10 transition-all duration-300"></div>
-                    <div className="absolute top-4 right-4 bg-gradient-gold text-black font-bold py-3 px-4 rounded-xl text-lg shadow-gold hover-glow">
-                      {item.price} €
+                <div key={item._id || item.id} className="snap-start flex-shrink-0 w-64 md:w-80">
+                  <Card className="glass-card hover-lift group border-0 shadow-elegant overflow-hidden rounded-2xl md:rounded-3xl">
+                    <div className="relative h-48 md:h-52 overflow-hidden">
+                      <img
+                        src={item.image || item.imageUrl || "/placeholder.png"}
+                        alt={item.name}
+                        className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110"
+                        onError={(e) => {
+                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300' fill='none'%3E%3Crect width='400' height='300' fill='%23F4F4F5'/%3E%3Cpath d='M200 150L150 120L100 150L150 180L200 150Z' fill='%23E5E5E5'/%3E%3Cpath d='M250 120L200 150L250 180L300 150L250 120Z' fill='%23E5E5E5'/%3E%3C/svg%3E";
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent group-hover:from-black/10 transition-all duration-300"></div>
+                      <div className="absolute top-3 right-3 bg-gradient-gold text-black font-bold py-2 px-3 md:py-3 md:px-4 rounded-xl text-sm md:text-lg shadow-gold hover-glow">
+                        {item.price} €
+                      </div>
+                      <div className="absolute bottom-3 left-3 glass-card px-2 py-1 md:px-3 md:py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                        <span className="text-xs text-gold font-medium">👀 View Details</span>
+                      </div>
                     </div>
-                    <div className="absolute bottom-4 left-4 glass-card px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                      <span className="text-xs text-gold font-medium">👀 View Details</span>
-                    </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <h3 className="font-serif font-bold text-xl text-foreground group-hover:text-gold transition-colors mb-3 line-clamp-1">
-                      {item.name}
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 group-hover:text-foreground/80 transition-colors">
-                      {item.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                    <CardContent className="p-4 md:p-6">
+                      <h3 className="font-serif font-bold text-lg md:text-xl text-foreground group-hover:text-gold transition-colors mb-2 md:mb-3 line-clamp-1">
+                        {item.name}
+                      </h3>
+                      <p className="text-muted-foreground text-xs md:text-sm leading-relaxed line-clamp-2 group-hover:text-foreground/80 transition-colors">
+                        {item.description}
+                      </p>
+                    </CardContent>
+                  </Card>
                 </div>
               ))}
             </div>
@@ -165,7 +188,7 @@ const MenuSection = () => {
         </div>
 
         {/* Show Full Menu Button */}
-        <div className="text-center mt-16">
+        <div className="text-center mt-12 md:mt-16">
           <Button
             onClick={handleShowFullMenu}
             variant="premium"
