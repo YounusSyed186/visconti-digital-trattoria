@@ -9,7 +9,8 @@ i18n.use(initReactI18next).init({
     en: { translation: en },
     it: { translation: it },
   },
-  fallbackLng: "en",
+  lng: "it",           // 👈 Initial language set to Italian
+  fallbackLng: "it",   // 👈 Fallback also Italian (instead of English)
   interpolation: {
     escapeValue: false,
   },

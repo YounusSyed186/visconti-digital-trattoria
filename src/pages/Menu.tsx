@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Utensils, Pizza } from 'lucide-react';
+import { ArrowLeft, Utensils, Pizza, ChevronLeft, ChevronRight } from 'lucide-react';
 import { GiCupcake, GiFullPizza, GiNoodles, GiSandwich } from "react-icons/gi";
 import { TbPizzaOff } from "react-icons/tb";
 import { MdKebabDining } from "react-icons/md";
@@ -17,6 +16,9 @@ const Menu = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [discount, setDiscount] = useState<number>(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const slideTimerRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
 
   const tabLabels = {
@@ -76,6 +78,85 @@ const Menu = () => {
     fetchMenuItems();
   }, []);
 
+  // Reset slide when tab changes
+  useEffect(() => {
+    setCurrentSlide(0);
+  }, [activeTab]);
+
+  // Scroll carousel to current slide
+  const scrollToSlide = useCallback((slideIndex: number) => {
+    if (carouselRef.current && window.innerWidth < 768) {
+      const itemWidth = carouselRef.current.offsetWidth;
+      carouselRef.current.scrollTo({
+        left: slideIndex * itemWidth,
+        behavior: 'smooth'
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    scrollToSlide(currentSlide);
+  }, [currentSlide, scrollToSlide]);
+
+  // Auto-slide carousel on mobile
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      // Clear any existing timer
+      if (slideTimerRef.current) {
+        clearInterval(slideTimerRef.current);
+      }
+
+      // Start new timer
+      slideTimerRef.current = setInterval(() => {
+        setCurrentSlide(prev => {
+          const items = activeTab === "all" 
+            ? Object.values(menuItems).flat() 
+            : menuItems[activeTab] || [];
+          const nextSlide = (prev + 1) % Math.max(items.length, 1);
+          return nextSlide;
+        });
+      }, 4000); // Change slide every 4 seconds
+
+      // Cleanup on unmount or when dependencies change
+      return () => {
+        if (slideTimerRef.current) {
+          clearInterval(slideTimerRef.current);
+        }
+      };
+    }
+  }, [activeTab, menuItems]);
+
+  // Handle manual navigation
+  const goToNextSlide = () => {
+    const items = activeTab === "all" 
+      ? Object.values(menuItems).flat() 
+      : menuItems[activeTab] || [];
+    setCurrentSlide(prev => (prev + 1) % Math.max(items.length, 1));
+    
+    // Reset timer on manual navigation
+    if (slideTimerRef.current) {
+      clearInterval(slideTimerRef.current);
+      slideTimerRef.current = setInterval(() => {
+        setCurrentSlide(prev => (prev + 1) % Math.max(items.length, 1));
+      }, 4000);
+    }
+  };
+
+  const goToPrevSlide = () => {
+    const items = activeTab === "all" 
+      ? Object.values(menuItems).flat() 
+      : menuItems[activeTab] || [];
+    setCurrentSlide(prev => (prev - 1 + items.length) % Math.max(items.length, 1));
+    
+    // Reset timer on manual navigation
+    if (slideTimerRef.current) {
+      clearInterval(slideTimerRef.current);
+      slideTimerRef.current = setInterval(() => {
+        setCurrentSlide(prev => (prev + 1) % Math.max(items.length, 1));
+      }, 4000);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-warm-50">
@@ -103,8 +184,14 @@ const Menu = () => {
   // Merge all items for "All" tab
   const allItems = Object.values(menuItems).flat();
 
+  // Check if we're on mobile
+  const isMobile = window.innerWidth < 768;
+
+  // Get current category items
+  const currentItems = activeTab === "all" ? allItems : menuItems[activeTab] || [];
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-warm-50 to-warm-100 py-4 md:py-8 px-3 sm:px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-warm-50 to-warm-100 py-4 md:py-8 px-3 sm:px-4 relative overflow-hidden pb-20">
       {/* Background shapes */}
       <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-amber-200 rounded-full -translate-y-12 md:-translate-y-16 translate-x-12 md:translate-x-16 opacity-50"></div>
       <div className="absolute bottom-0 left-0 w-32 h-32 md:w-40 md:h-40 bg-amber-300 rounded-full -translate-x-16 md:-translate-x-20 translate-y-16 md:translate-y-20 opacity-30"></div>
@@ -131,87 +218,149 @@ const Menu = () => {
           <div className="hidden sm:block w-20"></div>
         </div>
 
-        {/* Tabs Navigation */}
-        <div className="mb-6 md:mb-8">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="overflow-x-auto pb-2">
-              <TabsList className="inline-flex min-w-max bg-transparent p-1">
-                {Object.entries(tabLabels).map(([key, label]) => (
-                  <TabsTrigger
-                    key={key}
-                    value={key}
-                    className="flex flex-col sm:flex-row items-center justify-center px-3 py-2 rounded-full 
-                      text-xs sm:text-sm font-medium text-warm-800 border border-amber-200 
-                      data-[state=active]:bg-amber-600 data-[state=active]:text-white 
-                      whitespace-nowrap transition-colors mx-1 min-w-[70px]"
-                  >
-                    <span className="mb-1 sm:mb-0 sm:mr-1 md:mr-2">{tabIcons[key as keyof typeof tabIcons]}</span>
-                    <span className="hidden xs:inline">{label}</span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+        {/* Menu Items */}
+        <div className="mb-16">
+          {isMobile ? (
+            // Mobile Carousel View
+            <div className="relative">
+              <div 
+                ref={carouselRef}
+                className="flex overflow-x-hidden snap-x snap-mandatory no-scrollbar"
+                style={{ scrollBehavior: 'smooth' }}
+              >
+                {currentItems.map((item, index) => {
+                  const originalPrice = item.price;
+                  const discountedPrice =
+                    discount > 0 ? (originalPrice - (originalPrice * discount) / 100).toFixed(2) : null;
+
+                  return (
+                    <div 
+                      key={index} 
+                      className="w-full flex-shrink-0 snap-start px-2"
+                    >
+                      <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-black group h-full flex flex-col mx-auto max-w-md">
+                        {/* Image */}
+                        <div className="relative h-48 overflow-hidden">
+                          <img
+                            src={item.image || item.imageUrl || "/placeholder-food.jpg"}
+                            alt={item.name}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onError={(e) => {
+                              e.currentTarget.src = "/placeholder-food.jpg";
+                            }}
+                          />
+                        </div>
+
+                        {/* Details */}
+                        <CardContent className="p-4 flex-grow">
+                          <h3 className="font-bold text-base text-white group-hover:text-amber-400 transition-colors mb-2 line-clamp-1">
+                            {item.name}
+                          </h3>
+                          <p className="text-warm-300 text-sm leading-relaxed line-clamp-3">
+                            {item.description}
+                          </p>
+
+                          {/* Price with discount */}
+                          {discountedPrice ? (
+                            <div className="mt-2">
+                              <p className="text-xs text-red-400 line-through">€{originalPrice}</p>
+                              <p className="font-semibold text-amber-500">€{discountedPrice}</p>
+                            </div>
+                          ) : (
+                            <p className="mt-2 font-semibold text-amber-500">€{originalPrice}</p>
+                          )}
+                        </CardContent>
+
+                        {/* Footer */}
+                        <CardFooter className="p-4 pt-0">
+                          <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white text-sm">
+                            Add to Order
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              {/* Carousel Navigation */}
+              {currentItems.length > 1 && (
+                <>
+                  
+                  {/* Indicators */}
+                  <div className="flex justify-center mt-4 space-x-2">
+                    {currentItems.map((_, index) => (
+                      <button
+                        key={index}
+                        className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                          currentSlide === index 
+                            ? 'bg-amber-600 w-6' 
+                            : 'bg-amber-300 opacity-60'
+                        }`}
+                        onClick={() => setCurrentSlide(index)}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
+          ) : (
+            // Desktop Grid View
+            <div className="grid gap-4 md:gap-6 grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {currentItems.map((item, index) => {
+                const originalPrice = item.price;
+                const discountedPrice =
+                  discount > 0 ? (originalPrice - (originalPrice * discount) / 100).toFixed(2) : null;
 
-            {/* Menu Items */}
-            {Object.entries({ all: allItems, ...menuItems }).map(([category, items]) => (
-              <TabsContent key={category} value={category} className="mt-4 sm:mt-6">
-                <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {Array.isArray(items) &&
-                    items.map((item, index) => {
-                      const originalPrice = item.price;
-                      const discountedPrice =
-                        discount > 0 ? (originalPrice - (originalPrice * discount) / 100).toFixed(2) : null;
+                return (
+                  <Card
+                    key={index}
+                    className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-white group h-full flex flex-col"
+                  >
+                    {/* Image */}
+                    <div className="relative h-40 md:h-48 overflow-hidden">
+                      <img
+                        src={item.image || item.imageUrl || "/placeholder-food.jpg"}
+                        alt={item.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          e.currentTarget.src = "/placeholder-food.jpg";
+                        }}
+                      />
+                    </div>
 
-                      return (
-                        <Card
-                          key={index}
-                          className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-black group h-full flex flex-col"
-                        >
-                          {/* Image */}
-                          <div className="relative h-36 sm:h-40 md:h-48 overflow-hidden">
-                            <img
-                              src={item.image || item.imageUrl || "/placeholder-food.jpg"}
-                              alt={item.name}
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                              onError={(e) => {
-                                e.currentTarget.src = "/placeholder-food.jpg";
-                              }}
-                            />
-                          </div>
+                    {/* Details */}
+                    <CardContent className="p-4 flex-grow">
+                      <h3 className="font-bold text-base text-warm-900 group-hover:text-amber-700 transition-colors mb-2 line-clamp-1">
+                        {item.name}
+                      </h3>
+                      <p className="text-warm-700 text-sm leading-relaxed line-clamp-3">
+                        {item.description}
+                      </p>
 
-                          {/* Details */}
-                          <CardContent className="p-3 sm:p-4 flex-grow">
-                            <h3 className="font-bold text-sm sm:text-base text-warm-900 group-hover:text-amber-700 transition-colors mb-1 sm:mb-2 line-clamp-1">
-                              {item.name}
-                            </h3>
-                            <p className="text-warm-700 text-xs sm:text-sm leading-relaxed line-clamp-2 sm:line-clamp-3">
-                              {item.description}
-                            </p>
+                      {/* Price with discount */}
+                      {discountedPrice ? (
+                        <div className="mt-2">
+                          <p className="text-xs text-red-500 line-through">€{originalPrice}</p>
+                          <p className="font-semibold text-amber-600">€{discountedPrice}</p>
+                        </div>
+                      ) : (
+                        <p className="mt-2 font-semibold text-amber-600">€{originalPrice}</p>
+                      )}
+                    </CardContent>
 
-                            {/* Price with discount */}
-                            {discountedPrice ? (
-                              <div className="mt-2">
-                                <p className="text-xs text-red-500 line-through">€{originalPrice}</p>
-                                <p className="font-semibold text-amber-600">€{discountedPrice}</p>
-                              </div>
-                            ) : (
-                              <p className="mt-2 font-semibold text-amber-600">€{originalPrice}</p>
-                            )}
-                          </CardContent>
-
-                          {/* Footer */}
-                          <CardFooter className="p-3 sm:p-4 pt-0">
-                            <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm">
-                              Add to Order
-                            </Button>
-                          </CardFooter>
-                        </Card>
-                      );
-                    })}
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
+                    {/* Footer */}
+                    <CardFooter className="p-4 pt-0">
+                      <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white text-sm">
+                        Add to Order
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* CTA */}
@@ -225,6 +374,42 @@ const Menu = () => {
           </Button>
         </div>
       </div>
+
+      {/* Bottom Navigation Tabs - Mobile Only */}
+      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-amber-800 shadow-lg z-20 md:hidden">
+        <div className="overflow-x-auto">
+          <div className="flex px-2 py-2 min-w-max">
+            {Object.entries(tabLabels).map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => {
+                  setActiveTab(key);
+                  setCurrentSlide(0);
+                }}
+                className={`flex flex-col items-center justify-center px-3 py-2 rounded-full 
+                  text-xs font-medium mx-1 min-w-[60px] transition-colors
+                  ${activeTab === key 
+                    ? 'bg-amber-600 text-white' 
+                    : 'text-amber-200 bg-amber-900 hover:bg-amber-800'}`}
+              >
+                <span className="mb-1">{tabIcons[key as keyof typeof tabIcons]}</span>
+                <span>{label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Custom CSS for hiding scrollbar */}
+      <style jsx>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </div>
   );
 };

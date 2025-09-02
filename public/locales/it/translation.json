@@ -53,6 +53,19 @@
       "defaultHeading": "Piatti del Menu"
     }
   },
+  "chefSection": {
+    "heading": "Il Nostro Chef",
+    "description": "Chef Marco Rossi, con oltre 20 anni di esperienza, porta la vera tradizione italiana direttamente a tavola con un tocco moderno.",
+    "button": "Conosci il Nostro Chef",
+    "certifications": {
+      "title1": "Master in Cucina Italiana",
+      "desc1": "Rilasciato dall'Accademia Italiana della Cucina nel 2021",
+      "title2": "Riconoscimento Michelin",
+      "desc2": "Inserito nella Guida Michelin 2022",
+      "title3": "Premio Innovazione Culinaria",
+      "desc3": "Riconosciuto per i piatti fusion italiani moderni"
+    }
+  },
   "contactSection": {
     "heading": "Contatti & Posizione",
     "subheading": "Vieni a trovarci nel cuore di Pavia",

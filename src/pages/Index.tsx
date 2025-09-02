@@ -5,7 +5,6 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import LanguageToggle from "@/components/LanguageToggle";
 import OfferBadgeFetcher from "@/components/offerBadge/OfferBadgefetch";
-import ChefSection from "@/components/chefsection";
 
 const Index = () => {
   return (
@@ -19,7 +18,6 @@ const Index = () => {
       <AboutSection />
       <MenuSection />
       <ContactSection />
-      <ChefSection />
       <Footer />
     </div>
 
