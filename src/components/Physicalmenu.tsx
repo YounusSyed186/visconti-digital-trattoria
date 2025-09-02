@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Play, Pause, Eye, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Play, Pause, Eye, Calendar, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 
 interface MenuImage {
   _id: string;
@@ -18,52 +18,162 @@ const PhysicalMenuCarousel = () => {
   const [error, setError] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
+  
+  // Refs for DOM elements and values that don't trigger re-renders
+  const imageRef = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+  const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Swipe detection variables
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const minSwipeDistance = useRef(50);
 
+  // Memoized data calculations
+  const categories = useRef<string[]>([]);
+  const categoryImagesMap = useRef<Map<string, MenuImage[]>>(new Map());
+  
+  // Update derived data when images change
   useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}api/images`);
-        setImages(response.data);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to fetch menu images");
-      } finally {
-        setLoading(false);
+    if (images.length === 0) return;
+    
+    // Extract unique categories
+    categories.current = Array.from(new Set(images.map(img => img.category)));
+    
+    // Create category to images mapping
+    categoryImagesMap.current = images.reduce((map, image) => {
+      if (!map.has(image.category)) {
+        map.set(image.category, []);
       }
-    };
-    fetchImages();
+      map.get(image.category)!.push(image);
+      return map;
+    }, new Map<string, MenuImage[]>());
+  }, [images]);
+
+  // Fetch images with useCallback to prevent recreation on every render
+  const fetchImages = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}api/images`);
+      setImages(response.data);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch menu images");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // Auto-play functionality
   useEffect(() => {
-    if (!isAutoPlaying || images.length === 0) return;
+    fetchImages();
+  }, [fetchImages]);
 
-    const interval = setInterval(() => handleNext(), 4000);
-    return () => clearInterval(interval);
+  // Manage auto-play with cleanup
+  useEffect(() => {
+    if (!isAutoPlaying || images.length === 0) {
+      if (autoPlayRef.current) {
+        clearInterval(autoPlayRef.current);
+        autoPlayRef.current = null;
+      }
+      return;
+    }
+
+    autoPlayRef.current = setInterval(() => {
+      handleNext();
+    }, 4000);
+
+    return () => {
+      if (autoPlayRef.current) {
+        clearInterval(autoPlayRef.current);
+        autoPlayRef.current = null;
+      }
+    };
   }, [isAutoPlaying, images.length, currentIndex]);
 
-  const handleNext = () => {
+  // Handle clicks outside the popup to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node) &&
+          imageRef.current && !imageRef.current.contains(event.target as Node)) {
+        setShowPopup(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Navigation handlers with useCallback
+  const handleNext = useCallback(() => {
     if (isTransitioning || images.length === 0) return;
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev + 1) % images.length);
     setTimeout(() => setIsTransitioning(false), 400);
-  };
+  }, [isTransitioning, images.length]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (isTransitioning || images.length === 0) return;
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
     setTimeout(() => setIsTransitioning(false), 400);
-  };
+  }, [isTransitioning, images.length]);
 
-  const goToSlide = (index: number) => {
+  const goToSlide = useCallback((index: number) => {
     if (isTransitioning || index === currentIndex) return;
     setIsTransitioning(true);
     setCurrentIndex(index);
     setTimeout(() => setIsTransitioning(false), 400);
-  };
+  }, [isTransitioning, currentIndex]);
 
+  // Swipe handlers with useCallback
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > minSwipeDistance.current;
+    const isRightSwipe = distance < -minSwipeDistance.current;
+    
+    if (isLeftSwipe) {
+      handleNext();
+    } else if (isRightSwipe) {
+      handlePrev();
+    }
+    
+    // Reset values
+    touchStartX.current = 0;
+    touchEndX.current = 0;
+  }, [handleNext, handlePrev]);
+
+  // Preload next and previous images for smoother transitions
+  useEffect(() => {
+    if (images.length <= 1) return;
+    
+    const nextIndex = (currentIndex + 1) % images.length;
+    const prevIndex = (currentIndex - 1 + images.length) % images.length;
+    
+    const preloadImage = (src: string) => {
+      const img = new Image();
+      img.src = src;
+    };
+    
+    preloadImage(images[nextIndex].imageUrl);
+    preloadImage(images[prevIndex].imageUrl);
+  }, [currentIndex, images]);
+
+  // Loading state
   if (loading) return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 flex items-center justify-center">
       <div className="text-center">
@@ -76,6 +186,7 @@ const PhysicalMenuCarousel = () => {
     </div>
   );
 
+  // Error state
   if (error) return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 flex items-center justify-center px-4">
       <div className="text-center max-w-md bg-gray-900 rounded-2xl shadow-xl p-6 md:p-8 border border-yellow-700/50">
@@ -91,6 +202,7 @@ const PhysicalMenuCarousel = () => {
     </div>
   );
 
+  // Empty state
   if (!images.length) return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 flex items-center justify-center px-4">
       <div className="text-center max-w-md bg-gray-900 rounded-2xl shadow-xl p-6 md:p-8 border border-yellow-700/50">
@@ -107,7 +219,6 @@ const PhysicalMenuCarousel = () => {
   );
 
   const currentImage = images[currentIndex];
-  const categories = Array.from(new Set(images.map(img => img.category)));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 pb-12">
@@ -141,8 +252,8 @@ const PhysicalMenuCarousel = () => {
         {/* Category Tabs */}
         <div className="flex overflow-x-auto pb-4 mb-6 scrollbar-hide">
           <div className="flex space-x-2">
-            {categories.map((category, index) => {
-              const categoryImages = images.filter(img => img.category === category);
+            {categories.current.map((category) => {
+              const categoryImages = categoryImagesMap.current.get(category) || [];
               const firstImageIndex = images.findIndex(img => img.category === category);
               
               return (
@@ -163,16 +274,63 @@ const PhysicalMenuCarousel = () => {
 
         {/* Main Carousel */}
         <div className="relative bg-gray-900 rounded-2xl overflow-hidden shadow-2xl border border-yellow-700/30 mb-6">
-          <div className="relative aspect-[16/9] md:aspect-[16/10]">
+          <div 
+            className="relative h-[85vh] md:aspect-[16/10] md:h-auto"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            ref={imageRef}
+            onTouchStart={() => setShowPopup(true)}
+            onTouchEnd={() => setTimeout(() => setShowPopup(false), 2000)}
+          >
             <img
               src={currentImage.imageUrl}
               alt={`Menu - ${currentImage.category}`}
-              className={`w-full h-full object-cover transition-all duration-500 ${isTransitioning ? 'scale-105 opacity-70' : 'scale-100 opacity-100'}`}
-              onError={(e) => e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500' fill='%231a1a1a'%3E%3Crect width='800' height='500' fill='%231a1a1a'/%3E%3Cpath d='M400,250 L450,200 M400,250 L450,300 M400,250 L350,200 M400,250 L350,300' stroke='%23555' stroke-width='2'/%3E%3Ccircle cx='400' cy='250' r='50' stroke='%23555' stroke-width='2' fill='none'/%3E%3C/svg%3E"}
+              className={`w-full h-full object-contain transition-all duration-500 ${isTransitioning ? 'scale-105 opacity-70' : 'scale-100 opacity-100'}`}
+              loading="eager"
+              onError={(e) => {
+                e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500' fill='%231a1a1a'%3E%3Crect width='800' height='500' fill='%231a1a1a'/%3E%3Cpath d='M400,250 L450,200 M400,250 L450,300 M400,250 L350,200 M400,250 L350,300' stroke='%23555' stroke-width='2'/%3E%3Ccircle cx='400' cy='250' r='50' stroke='%23555' stroke-width='2' fill='none'/%3E%3C/svg%3E";
+              }}
             />
             
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            
+            {/* View Online Menu Button - Always visible on mobile, popup on desktop */}
+            <div 
+              className="absolute top-4 right-4 z-10"
+              onMouseEnter={() => setShowPopup(true)}
+              onMouseLeave={() => setShowPopup(false)}
+            >
+              {/* Mobile always visible button */}
+              <div className="md:hidden">
+                <button
+                  onClick={() => navigate('/menu')}
+                  className="bg-yellow-700/90 text-yellow-100 p-2 rounded-lg shadow-lg backdrop-blur-sm border border-yellow-500/30 flex items-center gap-2 text-sm font-medium"
+                >
+                  <ExternalLink size={16} />
+                  <span>Online Menu</span>
+                </button>
+              </div>
+              
+              {/* Desktop popup behavior */}
+              <div className="hidden md:block">
+                {showPopup && (
+                  <div 
+                    ref={popupRef}
+                    className="bg-yellow-700/90 text-yellow-100 p-2 rounded-lg shadow-lg backdrop-blur-sm border border-yellow-500/30"
+                  >
+                    <button
+                      onClick={() => navigate('/menu')}
+                      className="flex items-center gap-2 text-sm font-medium px-2 py-1 rounded-md hover:bg-yellow-600/50 transition-colors"
+                    >
+                      <ExternalLink size={16} />
+                      View Online Menu
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
             
             {/* Category label */}
             <div className="absolute top-4 left-4 bg-yellow-700/90 text-yellow-100 px-3 py-1 rounded-full text-sm font-medium">
@@ -180,19 +338,21 @@ const PhysicalMenuCarousel = () => {
             </div>
             
             {/* Navigation Arrows */}
-            <button 
-              onClick={handlePrev} 
-              disabled={isTransitioning} 
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/70 rounded-full flex items-center justify-center hover:bg-yellow-700/80 transition-all"
+            <button
+              onClick={handlePrev}
+              disabled={isTransitioning}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-yellow-100 p-3 rounded-full transition-all disabled:opacity-50 z-10"
+              aria-label="Previous image"
             >
-              <ChevronLeft className="w-6 h-6 text-yellow-100" />
+              <ChevronLeft className="w-6 h-6" />
             </button>
-            <button 
-              onClick={handleNext} 
-              disabled={isTransitioning} 
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/70 rounded-full flex items-center justify-center hover:bg-yellow-700/80 transition-all"
+            <button
+              onClick={handleNext}
+              disabled={isTransitioning}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-yellow-100 p-3 rounded-full transition-all disabled:opacity-50 z-10"
+              aria-label="Next image"
             >
-              <ChevronRight className="w-6 h-6 text-yellow-100" />
+              <ChevronRight className="w-6 h-6" />
             </button>
             
             {/* Image counter */}
@@ -211,11 +371,14 @@ const PhysicalMenuCarousel = () => {
                 key={img._id} 
                 onClick={() => goToSlide(i)}
                 className={`flex-shrink-0 relative group ${i === currentIndex ? 'ring-2 ring-yellow-500' : 'opacity-80 hover:opacity-100'}`}
+                aria-label={`View page ${i + 1}`}
+                aria-current={i === currentIndex ? 'true' : 'false'}
               >
                 <img 
                   src={img.imageUrl} 
                   alt={`Thumb ${i+1}`} 
                   className="w-20 h-16 object-cover rounded-lg" 
+                  loading="lazy"
                 />
                 {i === currentIndex && (
                   <div className="absolute inset-0 bg-yellow-500/20 rounded-lg"></div>

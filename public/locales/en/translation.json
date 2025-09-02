@@ -90,7 +90,7 @@
       },
       "freeDelivery": {
         "title": "Free Delivery",
-        "description": "Free delivery for orders over €8. Below €8, delivery costs €2"
+        "description": "Free delivery for orders over €10. Below €10, delivery costs €2"
       },
       "directions": "Directions"
     }

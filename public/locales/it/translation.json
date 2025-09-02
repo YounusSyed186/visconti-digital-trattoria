@@ -90,7 +90,7 @@
       },
       "freeDelivery": {
         "title": "Consegna Gratuita",
-        "description": "Consegna gratuita per ordini superiori a €8. Sotto €8, costo consegna €2"
+        "description": "Consegna gratuita per ordini superiori a €10. Sotto €10, costo consegna €2"
       },
       "directions": "Indicazioni"
     }
