@@ -21,6 +21,11 @@ const Menu = () => {
   const slideTimerRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
 
+  // Swipe detection variables
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const minSwipeDistance = useRef(50); // Minimum distance for a swipe to be registered
+
   const tabLabels = {
     all: "All",
     "pizze-tradizionali": "Traditional",
@@ -157,6 +162,33 @@ const Menu = () => {
     }
   };
 
+  // Swipe handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > minSwipeDistance.current;
+    const isRightSwipe = distance < -minSwipeDistance.current;
+    
+    if (isLeftSwipe) {
+      goToNextSlide();
+    } else if (isRightSwipe) {
+      goToPrevSlide();
+    }
+    
+    // Reset values
+    touchStartX.current = 0;
+    touchEndX.current = 0;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-warm-50">
@@ -227,6 +259,9 @@ const Menu = () => {
                 ref={carouselRef}
                 className="flex overflow-x-hidden snap-x snap-mandatory no-scrollbar"
                 style={{ scrollBehavior: 'smooth' }}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
               >
                 {currentItems.map((item, index) => {
                   const originalPrice = item.price;
@@ -286,6 +321,7 @@ const Menu = () => {
               {/* Carousel Navigation */}
               {currentItems.length > 1 && (
                 <>
+
                   
                   {/* Indicators */}
                   <div className="flex justify-center mt-4 space-x-2">
