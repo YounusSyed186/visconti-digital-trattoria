@@ -2,6 +2,7 @@ import heroImage from "@/assets/Bg1.png";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { isMobile } from 'react-device-detect';
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -10,6 +11,17 @@ const HeroSection = () => {
   const scrollToMenu = () => {
     const menuSection = document.getElementById("menu");
     menuSection?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleOrderOnline = () => {
+    if (isMobile) {
+      // Open phone dialer with the restaurant's number
+      window.location.href = 'tel:+390382458734';
+    } else {
+      // For desktop users, perhaps open a modal or redirect to online ordering
+      // For now, let's just show an alert with the phone number
+      alert(`${t("heroSection.callToOrder")}: +39 0382 458734`);
+    }
   };
 
   return (
@@ -48,6 +60,7 @@ const HeroSection = () => {
             variant="premium"
             size="lg"
             className="w-full sm:w-auto group relative overflow-hidden"
+            onClick={handleOrderOnline}
           >
             <span className="relative z-10 flex items-center gap-2 sm:gap-3 text-base sm:text-lg md:text-xl">
               <span className="text-xl sm:text-2xl group-hover:animate-bounce">

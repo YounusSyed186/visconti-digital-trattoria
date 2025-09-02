@@ -3,6 +3,8 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Play, Pause, Eye, Calendar, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { isMobile } from 'react-device-detect';
+import { useTranslation } from "react-i18next";
 
 interface MenuImage {
   _id: string;
@@ -20,6 +22,7 @@ const PhysicalMenuCarousel = () => {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   
   // Refs for DOM elements and values that don't trigger re-renders
   const imageRef = useRef<HTMLDivElement>(null);
@@ -156,6 +159,16 @@ const PhysicalMenuCarousel = () => {
     touchStartX.current = 0;
     touchEndX.current = 0;
   }, [handleNext, handlePrev]);
+   const handleOrderOnline = () => {
+    if (isMobile) {
+      // Open phone dialer with the restaurant's number
+      window.location.href = 'tel:+390382458734';
+    } else {
+      // For desktop users, perhaps open a modal or redirect to online ordering
+      // For now, let's just show an alert with the phone number
+      alert(`${t("heroSection.callToOrder")}: +39 0382 458734`);
+    }
+  };
 
   // Preload next and previous images for smoother transitions
   useEffect(() => {
@@ -393,7 +406,7 @@ const PhysicalMenuCarousel = () => {
           <h2 className="text-2xl font-serif font-bold text-yellow-100 mb-2">Experience Our Cuisine</h2>
           <p className="text-yellow-200 mb-4">Visit us to enjoy these exquisite dishes prepared by our master chefs</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button className="bg-yellow-700 hover:bg-yellow-600 text-yellow-100 font-medium">
+            <Button onClick={handleOrderOnline} className="bg-yellow-700 hover:bg-yellow-600 text-yellow-100 font-medium">
               Make Reservation
             </Button>
             <Button 

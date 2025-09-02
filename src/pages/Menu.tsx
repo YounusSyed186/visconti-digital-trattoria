@@ -9,6 +9,9 @@ import { TbPizzaOff } from "react-icons/tb";
 import { MdKebabDining } from "react-icons/md";
 import { GiHamburger } from "react-icons/gi";
 import { RiDrinksLine } from "react-icons/ri";
+import { isMobile } from 'react-device-detect';
+import { useTranslation } from 'react-i18next';
+
 
 const Menu = () => {
   const [activeTab, setActiveTab] = useState<string>("all");
@@ -20,6 +23,7 @@ const Menu = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const slideTimerRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Swipe detection variables
   const touchStartX = useRef(0);
@@ -144,6 +148,16 @@ const Menu = () => {
       slideTimerRef.current = setInterval(() => {
         setCurrentSlide(prev => (prev + 1) % Math.max(items.length, 1));
       }, 4000);
+    }
+  };
+   const handleOrderOnline = () => {
+    if (isMobile) {
+      // Open phone dialer with the restaurant's number
+      window.location.href = 'tel:+390382458734';
+    } else {
+      // For desktop users, perhaps open a modal or redirect to online ordering
+      // For now, let's just show an alert with the phone number
+      alert(`${t("heroSection.callToOrder")}: +39 0382 458734`);
     }
   };
 
@@ -352,7 +366,7 @@ const Menu = () => {
                 return (
                   <Card
                     key={index}
-                    className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-white group h-full flex flex-col"
+                    className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-black group h-full flex flex-col"
                   >
                     {/* Image */}
                     <div className="relative h-40 md:h-48 overflow-hidden">
@@ -405,7 +419,7 @@ const Menu = () => {
           <p className="mb-3 md:mb-4 text-sm md:text-base max-w-2xl mx-auto">
             Experience the authentic taste of Italy delivered right to your door
           </p>
-          <Button size="lg" className="bg-white text-amber-700 hover:bg-warm-100 text-sm md:text-base">
+          <Button onClick={handleOrderOnline} size="lg" className="bg-white text-amber-700 hover:bg-warm-100 text-sm md:text-base">
             Place Your Order Now
           </Button>
         </div>
