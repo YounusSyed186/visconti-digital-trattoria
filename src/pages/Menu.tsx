@@ -526,6 +526,28 @@ const Menu = () => {
                             {item.description}
                           </p>
 
+                          {/* Price Display */}
+                          <div className="mt-4 text-center">
+                            {discount > 0 ? (
+                              <div className="flex justify-center items-center gap-2">
+                                <span className="text-lg font-bold text-gold">
+                                  €{(Number(originalPrice) - (Number(originalPrice) * discount) / 100).toFixed(2)}
+                                </span>
+                                <span className="text-sm text-muted-foreground line-through">
+                                  €{Number(originalPrice).toFixed(2)}
+                                </span>
+                                <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-xl">
+                                  -{discount}%
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="text-lg font-bold text-gold">
+                                €{Number(originalPrice).toFixed(2)}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Cart Controls */}
                           <div className="mt-4 flex justify-center">
                             <CartControls itemId={item._id || item.id} />
                           </div>
