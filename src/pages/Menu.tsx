@@ -59,14 +59,14 @@ const CartControls = ({ itemId }: { itemId: string }) => {
     <div className="flex items-center gap-3">
       <Button
         onClick={handleDecrease}
-        className="bg-yellow-700 text-white hover:bg-yellow-800"
+        className="bg-yellow-700 text-black hover:bg-yellow-800"
       >
         -
       </Button>
       <span className="font-bold">{qty}</span>
       <Button
         onClick={handleAdd}
-        className="bg-yellow-500 text-white hover:bg-yellow-600"
+        className="bg-yellow-500 text-black hover:bg-yellow-600"
       >
         +
       </Button>
@@ -369,7 +369,7 @@ const Menu = () => {
           <div className="flex flex-col h-full">
             {/* Cart Header */}
             <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-xl font-bold">Your Cart ({cartItemCount})</h2>
+              <h2 className="text-xl text-black font-bold">Your Cart ({cartItemCount})</h2>
               <Button
                 onClick={() => setIsCartOpen(false)}
                 variant="ghost"
@@ -383,7 +383,7 @@ const Menu = () => {
             {/* Cart Items */}
             <div className="flex-1 overflow-y-auto p-4 hide-scrollbar">
               {cartItems.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-black">
                   <ShoppingCart className="h-12 w-12 mx-auto mb-4 opacity-30" />
                   <p>Your cart is empty</p>
                 </div>
@@ -398,13 +398,13 @@ const Menu = () => {
                           className="w-12 h-12 object-cover rounded"
                         />
                         <div>
-                          <h3 className="font-medium">{item.name}</h3>
-                          <p className="text-sm text-gray-500">
+                          <h3 className="font-medium text-black">{item.name}</h3>
+                          <p className="text-sm text-black">
                             €{Number(item.price).toFixed(2)} x {item.quantity}</p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className="font-bold">€{(item.price * item.quantity).toFixed(2)}</span>
+                        <span className="font-bold text-black">€{(item.price * item.quantity).toFixed(2)}</span>
                         <Button
                           onClick={() => removeFromCart(item.id)}
                           variant="ghost"
@@ -423,13 +423,13 @@ const Menu = () => {
             {/* Cart Footer */}
             {cartItems.length > 0 && (
               <div className="border-t p-4 space-y-4">
-                <div className="flex justify-between text-lg font-bold">
+                <div className="flex justify-between text-lg text-black font-bold">
                   <span>Total:</span>
                   <span>€{cartTotal.toFixed(2)}</span>
                 </div>
                 <Button
                   onClick={handleCheckout}
-                  className="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-3"
+                  className="w-full bg-red-500 hover:bg-yellow-700 text-white py-3"
                 >
                   Proceed to Checkout
                 </Button>
@@ -520,7 +520,7 @@ const Menu = () => {
                           <h3 className="font-serif font-bold text-xl text-red-900 mb-3 text-center">
                             {item.name}
                           </h3>
-                          <p className="text-blue-300 text-sm leading-relaxed text-center">
+                          <p className="text-red-400 text-sm leading-relaxed text-center">
                             {item.description}
                           </p>
 
@@ -528,18 +528,18 @@ const Menu = () => {
                           <div className="mt-4 text-center">
                             {discount > 0 ? (
                               <div className="flex justify-center items-center gap-2">
-                                <span className="text-lg font-bold text-yellow-700">
+                                <span className="text-lg text-red-500 font-bold">
                                   €{(Number(originalPrice) - (Number(originalPrice) * discount) / 100).toFixed(2)}
                                 </span>
-                                <span className="text-sm text-muted-foreground line-through">
+                                <span className="text-sm text-red-400 line-through">
                                   €{Number(originalPrice).toFixed(2)}
                                 </span>
-                                <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-xl">
+                                <span className="text-xs bg-red-500 text-red-400 px-2 py-1 rounded-xl">
                                   -{discount}%
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-lg font-bold text-yellow-700">
+                              <span className="text-lg font-bold text-red-800">
                                 €{Number(originalPrice).toFixed(2)}
                               </span>
                             )}
