@@ -48,7 +48,7 @@ const CartControls = ({ itemId }: { itemId: string }) => {
     return (
       <Button
         onClick={handleAdd}
-        className="bg-gold text-black hover:bg-black hover:text-gold"
+        className="bg-yellow-500 text-black hover:bg-yellow-600 hover:text-black"
       >
         Add to Cart
       </Button>
@@ -59,14 +59,14 @@ const CartControls = ({ itemId }: { itemId: string }) => {
     <div className="flex items-center gap-3">
       <Button
         onClick={handleDecrease}
-        className="bg-red-500 text-white hover:bg-red-700"
+        className="bg-yellow-700 text-white hover:bg-yellow-800"
       >
         -
       </Button>
       <span className="font-bold">{qty}</span>
       <Button
         onClick={handleAdd}
-        className="bg-green-500 text-white hover:bg-green-700"
+        className="bg-yellow-500 text-white hover:bg-yellow-600"
       >
         +
       </Button>
@@ -313,10 +313,10 @@ const Menu = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-warm-50">
+      <div className="min-h-screen flex items-center justify-center bg-yellow-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-warm-700">Loading our delicious menu...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto mb-4"></div>
+          <p className="text-yellow-700">Loading our delicious menu...</p>
         </div>
       </div>
     );
@@ -324,10 +324,10 @@ const Menu = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-warm-50">
+      <div className="min-h-screen flex items-center justify-center bg-yellow-50">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
-          <Button onClick={() => navigate('/')} className="bg-amber-600 hover:bg-amber-700">
+          <Button onClick={() => navigate('/')} className="bg-yellow-600 hover:bg-yellow-700">
             Go Back Home
           </Button>
         </div>
@@ -342,16 +342,16 @@ const Menu = () => {
   const currentItems = activeTab === "all" ? allItems : menuItems[activeTab] || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-warm-50 to-warm-100 py-4 md:py-8 px-3 sm:px-4 relative overflow-hidden pb-20">
+    <div className="min-h-screen bg-yellow-50 py-4 md:py-8 px-3 sm:px-4 relative overflow-hidden pb-20">
       {/* Background shapes */}
-      <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-amber-200 rounded-full -translate-y-12 md:-translate-y-16 translate-x-12 md:translate-x-16 opacity-50"></div>
-      <div className="absolute bottom-0 left-0 w-32 h-32 md:w-40 md:h-40 bg-amber-300 rounded-full -translate-x-16 md:-translate-x-20 translate-y-16 md:translate-y-20 opacity-30"></div>
+      <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-yellow-200 rounded-full -translate-y-12 md:-translate-y-16 translate-x-12 md:translate-x-16 opacity-50"></div>
+      <div className="absolute bottom-0 left-0 w-32 h-32 md:w-40 md:h-40 bg-yellow-300 rounded-full -translate-x-16 md:-translate-x-20 translate-y-16 md:translate-y-20 opacity-30"></div>
 
       {/* Cart Icon */}
       <div className="fixed top-4 right-4 z-30">
         <Button
           onClick={() => setIsCartOpen(true)}
-          className="relative bg-amber-600 hover:bg-amber-700 text-white rounded-xl p-3 h-18 w-18 shadow-lg overflow-visible"
+          className="relative bg-yellow-600 hover:bg-yellow-700 text-white rounded-xl p-3 h-18 w-18 shadow-lg overflow-visible"
         >
           <ShoppingCart className="h-6 w-6" />
           {cartItemCount > 0 && (
@@ -360,14 +360,12 @@ const Menu = () => {
             </span>
           )}
         </Button>
-
-
       </div>
 
       {/* Cart Sidebar */}
       <div className={`fixed inset-0 z-40 transition-opacity duration-300 ${isCartOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsCartOpen(false)}></div>
-        <div className={`absolute right-0 top-0 h-full w-full max-w-md bg-black shadow-xl transform transition-transform duration-300 ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className={`absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl transform transition-transform duration-300 ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="flex flex-col h-full">
             {/* Cart Header */}
             <div className="flex items-center justify-between p-4 border-b">
@@ -431,7 +429,7 @@ const Menu = () => {
                 </div>
                 <Button
                   onClick={handleCheckout}
-                  className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3"
+                  className="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-3"
                 >
                   Proceed to Checkout
                 </Button>
@@ -446,17 +444,17 @@ const Menu = () => {
         <div className="flex flex-col sm:flex-row items-center mb-6 md:mb-8 gap-4">
           <Button
             onClick={() => navigate(-1)}
-            className="flex items-center bg-amber-600 hover:bg-amber-700 text-white self-start sm:self-auto"
+            className="flex items-center bg-yellow-600 hover:bg-yellow-700 text-white self-start sm:self-auto"
             size="sm"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
           </Button>
           <div className="flex-1 text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-warm-900 font-serif">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-yellow-900 font-serif">
               Our Menu
             </h1>
-            <p className="text-warm-700 mt-1 sm:mt-2 text-sm sm:text-base max-w-2xl mx-auto">
+            <p className="text-yellow-700 mt-1 sm:mt-2 text-sm sm:text-base max-w-2xl mx-auto">
               Discover our authentic Italian flavors and specialties
             </p>
           </div>
@@ -472,8 +470,8 @@ const Menu = () => {
               className={`flex items-center px-4 py-2 rounded-full 
                 text-sm font-medium transition-colors
                 ${activeTab === key
-                  ? 'bg-amber-600 text-white'
-                  : 'text-warm-700 bg-warm-200 hover:bg-amber-200'}`}
+                  ? 'bg-yellow-600 text-white'
+                  : 'text-yellow-700 bg-yellow-200 hover:bg-yellow-300'}`}
             >
               <span className="mr-2">{tabIcons[key as keyof typeof tabIcons]}</span>
               {label}
@@ -504,7 +502,7 @@ const Menu = () => {
                       key={index}
                       className="w-full flex-shrink-0 snap-start px-2"
                     >
-                      <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-black group h-full flex flex-col mx-auto max-w-md">
+                      <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-white group h-full flex flex-col mx-auto max-w-md">
                         {/* Image */}
                         <div className="relative h-48 overflow-hidden">
                           <img
@@ -519,10 +517,10 @@ const Menu = () => {
 
                         {/* Details */}
                         <CardContent className="p-6">
-                          <h3 className="font-serif font-bold text-xl text-foreground mb-3 text-center">
+                          <h3 className="font-serif font-bold text-xl text-red-900 mb-3 text-center">
                             {item.name}
                           </h3>
-                          <p className="text-muted-foreground text-sm leading-relaxed text-center">
+                          <p className="text-blue-300 text-sm leading-relaxed text-center">
                             {item.description}
                           </p>
 
@@ -530,7 +528,7 @@ const Menu = () => {
                           <div className="mt-4 text-center">
                             {discount > 0 ? (
                               <div className="flex justify-center items-center gap-2">
-                                <span className="text-lg font-bold text-gold">
+                                <span className="text-lg font-bold text-yellow-700">
                                   €{(Number(originalPrice) - (Number(originalPrice) * discount) / 100).toFixed(2)}
                                 </span>
                                 <span className="text-sm text-muted-foreground line-through">
@@ -541,7 +539,7 @@ const Menu = () => {
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-lg font-bold text-gold">
+                              <span className="text-lg font-bold text-yellow-700">
                                 €{Number(originalPrice).toFixed(2)}
                               </span>
                             )}
@@ -572,8 +570,8 @@ const Menu = () => {
                       <button
                         key={index}
                         className={`h-2 w-2 rounded-xl transition-all duration-300 ${currentSlide === index
-                          ? 'bg-amber-600 w-6'
-                          : 'bg-amber-300 opacity-60'
+                          ? 'bg-yellow-600 w-6'
+                          : 'bg-yellow-300 opacity-60'
                           }`}
                         onClick={() => setCurrentSlide(index)}
                         aria-label={`Go to slide ${index + 1}`}
@@ -594,7 +592,7 @@ const Menu = () => {
                 return (
                   <Card
                     key={index}
-                    className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-black group h-full flex flex-col"
+                    className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-white group h-full flex flex-col"
                   >
                     {/* Image */}
                     <div className="relative h-40 md:h-48 overflow-hidden">
@@ -610,10 +608,10 @@ const Menu = () => {
 
                     {/* Details */}
                     <CardContent className="p-6">
-                      <h3 className="font-serif font-bold text-xl text-foreground group-hover:text-gold transition-colors mb-3 text-center">
+                      <h3 className="font-serif font-bold text-xl text-black group-hover:text-yellow-700 transition-colors mb-3 text-center">
                         {item.name}
                       </h3>
-                      <p className="text-muted-foreground text-sm leading-relaxed group-hover:text-foreground/80 transition-colors text-center">
+                      <p className="text-black text-sm leading-relaxed group-hover:text-foreground/80 transition-colors text-center">
                         {item.description}
                       </p>
 
@@ -621,7 +619,7 @@ const Menu = () => {
                       <div className="mt-4 text-center">
                         {discount > 0 ? (
                           <div className="flex justify-center items-center gap-2">
-                            <span className="text-lg font-bold text-gold">
+                            <span className="text-lg font-bold text-yellow-700">
                               €{(Number(originalPrice) - (Number(originalPrice) * discount) / 100).toFixed(2)}
                             </span>
                             <span className="text-sm text-muted-foreground line-through">
@@ -632,7 +630,7 @@ const Menu = () => {
                             </span>
                           </div>
                         ) : (
-                          <span className="text-lg font-bold text-gold">
+                          <span className="text-lg font-bold text-yellow-700">
                             €{Number(originalPrice).toFixed(2)}
                           </span>
                         )}
@@ -651,19 +649,19 @@ const Menu = () => {
         </div>
 
         {/* CTA */}
-        <div className="bg-amber-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-center text-white mb-6 md:mb-8">
+        <div className="bg-yellow-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-center text-white mb-6 md:mb-8">
           <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-3">Ready to order?</h2>
           <p className="mb-3 md:mb-4 text-sm md:text-base max-w-2xl mx-auto">
             Experience the authentic taste of Italy delivered right to your door
           </p>
-          <Button onClick={handleOrderOnline} size="lg" className="bg-white text-amber-700 hover:bg-warm-100 text-sm md:text-base">
+          <Button onClick={handleOrderOnline} size="lg" className="bg-white text-yellow-700 hover:bg-yellow-100 text-sm md:text-base">
             Place Your Order Now
           </Button>
         </div>
       </div>
 
       {/* Bottom Navigation Tabs - Mobile Only */}
-      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-amber-800 shadow-lg z-20 md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 bg-yellow-800 border-t border-yellow-700 shadow-lg z-20 md:hidden">
         <div className="overflow-x-auto">
           <div className="flex px-2 py-2 min-w-max">
             {Object.entries(tabLabels).map(([key, label]) => (
@@ -676,8 +674,8 @@ const Menu = () => {
                 className={`flex flex-col items-center justify-center px-3 py-2 rounded-xl 
                   text-xs font-medium mx-1 min-w-[60px] transition-colors
                   ${activeTab === key
-                    ? 'bg-amber-600 text-white'
-                    : 'text-amber-200 bg-amber-900 hover:bg-amber-800'}`}
+                    ? 'bg-yellow-600 text-white'
+                    : 'text-yellow-200 bg-yellow-700 hover:bg-yellow-600'}`}
               >
                 <span className="mb-1">{tabIcons[key as keyof typeof tabIcons]}</span>
                 <span>{label}</span>

@@ -6,7 +6,7 @@ const ContactSection = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-20 px-4 bg-gradient-dark relative">
+    <section className="py-20 px-4 bg-yellow-100 relative">
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-1/3 left-1/4 w-48 h-48 bg-gold rounded-full blur-3xl"></div>
         <div className="absolute bottom-1/4 right-1/3 w-32 h-32 bg-wine rounded-full blur-2xl"></div>
@@ -14,7 +14,7 @@ const ContactSection = () => {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-gold mb-4">
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black mb-4">
             {t("contactSection.heading")}
           </h2>
           <p className="text-xl text-muted-foreground">

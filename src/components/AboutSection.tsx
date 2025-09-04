@@ -6,7 +6,7 @@ const AboutSection = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-20 px-4 bg-gradient-dark relative overflow-hidden">
+    <section className="py-20 px-4 bg-yellow-100 relative overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full opacity-10">
         <div className="absolute top-1/4 left-1/6 w-64 h-64 bg-wine rounded-full blur-3xl"></div>
@@ -17,7 +17,7 @@ const AboutSection = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           
           <div className="space-y-6">
-            <h2 className="text-4xl md:text-5xl font-serif font-bold text-gold mb-6">
+            <h2 className="text-4xl md:text-5xl font-serif font-bold text-black mb-6">
               {t("aboutSection.heading")}
             </h2>
             

@@ -21,7 +21,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-black/60"></div>
 
       {/* Decorative Pulses */}
-      <div className="absolute top-1/4 left-1/4 w-20 sm:w-32 h-20 sm:h-32 bg-gold/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute top-1/4 left-1/4 w-20 sm:w-32 h-20 sm:h-32 bg-yellow/20 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-1/3 right-1/4 w-16 sm:w-24 h-16 sm:h-24 bg-wine/30 rounded-full blur-2xl animate-pulse delay-1000"></div>
 
       {/* Content */}
@@ -61,7 +61,7 @@ const HeroSection = () => {
             variant="glass"
             size="lg"
             onClick={() => navigate("/menuPhy")}
-            className="w-full sm:w-auto border-2 border-gold/50 text-gold hover:bg-gold/10 hover:border-gold group"
+            className="w-full sm:w-auto border-2 border-gold/50 text-gold hover:bg-yellow/10 hover:border-gold group"
           >
             <span className="flex items-center gap-2 sm:gap-3 text-base sm:text-lg md:text-xl">
               <span className="text-lg sm:text-xl group-hover:scale-110 transition-transform">
@@ -75,7 +75,7 @@ const HeroSection = () => {
             variant="glass"
             size="lg"
             onClick={() => navigate("/menu")}
-            className="w-full sm:w-auto border-2 border-gold/50 text-gold hover:bg-gold/10 hover:border-gold group"
+            className="w-full sm:w-auto border-2 border-gold/50 text-gold hover:bg-yellow/10 hover:border-gold group"
           >
             <span className="flex items-center gap-2 sm:gap-3 text-base sm:text-lg md:text-xl">
               <span className="text-lg sm:text-xl group-hover:scale-110 transition-transform">

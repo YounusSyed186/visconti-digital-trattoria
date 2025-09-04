@@ -40,14 +40,14 @@ const MenuSection = () => {
 
   useEffect(() => {
     if (menuItems.length === 0) return;
-    
+
     // Set up auto-slide
     intervalRef.current = setInterval(() => {
-      setCurrentIndex((prevIndex) => 
+      setCurrentIndex((prevIndex) =>
         prevIndex === menuItems.length - 1 ? 0 : prevIndex + 1
       );
     }, 4000); // Change card every 4 seconds
-    
+
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -75,7 +75,7 @@ const MenuSection = () => {
       clearInterval(intervalRef.current);
     }
     intervalRef.current = setInterval(() => {
-      setCurrentIndex((prevIndex) => 
+      setCurrentIndex((prevIndex) =>
         prevIndex === menuItems.length - 1 ? 0 : prevIndex + 1
       );
     }, 4000);
@@ -97,9 +97,9 @@ const MenuSection = () => {
   if (error) return (
     <div className="text-center py-12 text-red-500">
       <p>Error: {error}</p>
-      <Button 
-        onClick={() => window.location.reload()} 
-        className="mt-4 bg-gold text-black hover:bg-black hover:text-gold"
+      <Button
+        onClick={() => window.location.reload()}
+        className="mt-4 bg-yellow text-black hover:bg-black hover:text-gold"
       >
         Try Again
       </Button>
@@ -107,10 +107,10 @@ const MenuSection = () => {
   );
 
   return (
-    <section id="menu" className="py-12 md:py-20 px-4 bg-gradient-to-b from-background to-amber-900 relative overflow-hidden">
+    <section id="menu" className="py-12 md:py-20 px-4 bg-yellow-100 relative overflow-hidden">
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gold mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-black mb-4">
             Il Nostro Menu
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
@@ -124,9 +124,8 @@ const MenuSection = () => {
             {menuItems.map((item, index) => (
               <div
                 key={item._id || item.id}
-                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                  index === currentIndex ? 'opacity-100' : 'opacity-0'
-                }`}
+                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'
+                  }`}
               >
                 <div className="flex justify-center items-center h-full px-4">
                   <Card className="glass-card hover-lift group border-0 shadow-elegant overflow-hidden rounded-3xl w-full max-w-md">
@@ -185,9 +184,8 @@ const MenuSection = () => {
                 <button
                   key={slideIndex}
                   onClick={() => goToSlide(slideIndex)}
-                  className={`h-3 rounded-full transition-all duration-300 ${
-                    slideIndex === currentIndex ? 'w-8 bg-gold' : 'w-3 bg-gray-300'
-                  }`}
+                  className={`h-3 rounded-full transition-all duration-300 ${slideIndex === currentIndex ? 'w-8 bg-yellow' : 'w-3 bg-gray-300'
+                    }`}
                   aria-label={`Go to dish ${slideIndex + 1}`}
                 />
               ))}
