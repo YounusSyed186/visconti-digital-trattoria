@@ -289,12 +289,16 @@ const PhysicalMenuCarousel = () => {
         <div className="relative bg-gray-900 rounded-2xl overflow-hidden shadow-2xl border border-yellow-700/30 mb-6">
           <div 
             className="relative h-[85vh] md:aspect-[16/10] md:h-auto"
-            onTouchStart={handleTouchStart}
+            onTouchStart={(e) => {
+              handleTouchStart(e);
+              setShowPopup(true);
+            }}
             onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
+            onTouchEnd={() => {
+              handleTouchEnd();
+              setTimeout(() => setShowPopup(false), 2000);
+            }}
             ref={imageRef}
-            onTouchStart={() => setShowPopup(true)}
-            onTouchEnd={() => setTimeout(() => setShowPopup(false), 2000)}
           >
             <img
               src={currentImage.imageUrl}

@@ -16,8 +16,8 @@
     --popover: 0 0% 10%;
     --popover-foreground: 35 20% 90%;
 
-    /* Warm Golden Primary */
-    --primary: 43 74% 66%;
+    /* Bright Yellow Primary */
+    --primary: 60 100% 65%;
     --primary-foreground: 0 0% 6%;
 
     /* Wine Red Secondary */
@@ -28,8 +28,8 @@
     --muted: 20 10% 15%;
     --muted-foreground: 35 8% 60%;
 
-    /* Golden Accent */
-    --accent: 43 74% 66%;
+    /* Yellow Accent */
+    --accent: 60 100% 65%;
     --accent-foreground: 0 0% 6%;
 
     --destructive: 0 62% 45%;
@@ -37,28 +37,28 @@
 
     --border: 20 15% 18%;
     --input: 20 15% 18%;
-    --ring: 43 74% 66%;
+    --ring: 60 100% 65%;
 
     --radius: 0.75rem;
 
     /* Italian Luxury Colors */
-    --gold: 43 74% 66%;
-    --gold-dark: 43 60% 45%;
+    --gold: 60 100% 65%;
+    --gold-dark: 60 90% 50%;
     --wine: 0 45% 35%;
     --wine-light: 0 45% 45%;
     --charcoal: 0 0% 10%;
     --warm-white: 35 20% 92%;
-    --amber-glow: 35 100% 75%;
+    --amber-glow: 60 100% 75%;
 
     /* Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(43 74% 66%) 0%, hsl(43 60% 45%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(60 100% 65%) 0%, hsl(60 90% 50%) 100%);
     --gradient-dark: linear-gradient(180deg, hsl(0 0% 6%) 0%, hsl(0 0% 10%) 100%);
     --gradient-wine: linear-gradient(135deg, hsl(0 45% 35%) 0%, hsl(0 45% 25%) 100%);
     
     /* Shadows */
-    --shadow-gold: 0 10px 30px -5px hsl(43 74% 66% / 0.3);
+    --shadow-gold: 0 10px 30px -5px hsl(60 100% 65% / 0.3);
     --shadow-elegant: 0 20px 60px -10px hsl(0 0% 0% / 0.5);
-    --shadow-warm: 0 8px 25px -5px hsl(35 100% 75% / 0.2);
+    --shadow-warm: 0 8px 25px -5px hsl(60 100% 75% / 0.2);
 
     --sidebar-background: 0 0% 98%;
 
@@ -143,7 +143,7 @@
   }
 
   .glow-gold {
-    box-shadow: 0 0 20px hsl(43 74% 66% / 0.3);
+    box-shadow: 0 0 20px hsl(60 100% 65% / 0.3);
   }
 
   .animate-glow {
@@ -164,7 +164,7 @@
   }
 
   .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(43 74% 66%) 0%, hsl(43 60% 45%) 100%);
+    background: linear-gradient(135deg, hsl(60 100% 65%) 0%, hsl(60 90% 50%) 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -182,7 +182,7 @@
     left: -100%;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, hsl(43 74% 66%), transparent);
+    background: linear-gradient(90deg, transparent, hsl(60 100% 65%), transparent);
     animation: slide 2s infinite;
   }
 
@@ -204,10 +204,10 @@
 /* Modern Animations */
 @keyframes glow {
   from {
-    box-shadow: 0 0 20px hsl(43 74% 66% / 0.2);
+    box-shadow: 0 0 20px hsl(60 100% 65% / 0.2);
   }
   to {
-    box-shadow: 0 0 30px hsl(43 74% 66% / 0.4);
+    box-shadow: 0 0 30px hsl(60 100% 65% / 0.4);
   }
 }
 

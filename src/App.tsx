@@ -7,7 +7,6 @@ import Index from "./pages/Index";
 import Menu from "./pages/Menu";
 import NotFound from "./pages/NotFound";
 import { DayPickerProvider } from "react-day-picker";
-import FullMenuPage from "./components/MoreMenu";
 import PhysicalMenuCarousel from "./components/Physicalmenu";
 import './il8n'
 

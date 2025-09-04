@@ -688,7 +688,7 @@ const Menu = () => {
       </div>
 
       {/* Custom CSS for hiding scrollbar */}
-      <style jsx>{`
+      <style>{`
         .no-scrollbar::-webkit-scrollbar {
           display: none;
         }
