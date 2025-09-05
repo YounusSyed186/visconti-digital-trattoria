@@ -117,7 +117,7 @@ const Menu = () => {
     "kebab-panini": <MdKebabDining className="w-4 h-4" />,
     burgers: <GiHamburger className="w-4 h-4" />,
     bibite: <RiDrinksLine className="w-4 h-4" />,
-    "paidina & panino": <GiSandwich className="w-4 h-4" />,
+    "fritte": <GiSandwich className="w-4 h-4" />,
     "Indian cuisine": <GiNoodles className="w-4 h-4" />,
     dolco: <GiCupcake className="w-4 h-4" />
   };
@@ -145,6 +145,7 @@ const Menu = () => {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}api/menu`);
         if (response.data?.groupedItems && typeof response.data.groupedItems === 'object') {
           setMenuItems(response.data.groupedItems);
+          console.log('Fetched menu items:', response.data.groupedItems);
         } else {
           setError('API response is not in the expected format');
         }
