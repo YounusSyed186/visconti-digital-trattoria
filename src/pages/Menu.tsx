@@ -98,7 +98,7 @@ const Menu = () => {
 
   const tabLabels = {
     all: "All",
-    "menu fisso": "menu fisso",
+    "menu fisso": "menu-fisso",
     "pizze-tradizionali": "pizze-tradizionali",
     "pizze-speciali": "pizze-speciali",
     calzoni: "calzoni",
