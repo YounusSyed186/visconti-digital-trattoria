@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Utensils, Pizza, ChevronLeft, ChevronRight, ShoppingCart, X } from 'lucide-react';
-import { GiCupcake, GiFullPizza, GiNoodles, GiSandwich } from "react-icons/gi";
+import { ArrowLeft, Utensils, Pizza, ShoppingCart, X } from 'lucide-react';
+import { GiCupcake, GiFrenchFries, GiFullPizza, GiNoodles,  } from "react-icons/gi";
 import { TbPizzaOff } from "react-icons/tb";
-import { MdKebabDining } from "react-icons/md";
+import { MdFastfood, MdKebabDining } from "react-icons/md";
 import { GiHamburger } from "react-icons/gi";
 import { RiDrinksLine } from "react-icons/ri";
 import { isMobile as isMobileDevice } from 'react-device-detect';
@@ -98,26 +98,28 @@ const Menu = () => {
 
   const tabLabels = {
     all: "All",
-    "pizze-tradizionali": "Traditional",
-    "pizze-speciali": "Specialty",
-    calzoni: "Calzones",
-    "kebab-panini": "Kebab",
+    "menu fisso": "menu fisso",
+    "pizze-tradizionali": "pizze-tradizionali",
+    "pizze-speciali": "pizze-speciali",
+    calzoni: "calzoni",
+    "kebab-panini": "kebab-panini",
     burgers: "Burgers",
-    bibite: "Drinks",
-    "paidina & panino": "Panini",
+    bibite: "bibite",
+    "fritte": "fritte",
     "Indian cuisine": "Indian",
-    dolco: "Desserts"
+    dolco: "dolco"
   };
 
   const tabIcons = {
     all: <Utensils className="w-4 h-4" />,
+    "menu fisso": <MdFastfood  className="w-4 h-4" />,
     "pizze-tradizionali": <Pizza className="w-4 h-4" />,
     "pizze-speciali": <TbPizzaOff className="w-4 h-4" />,
     calzoni: <GiFullPizza className="w-4 h-4" />,
     "kebab-panini": <MdKebabDining className="w-4 h-4" />,
     burgers: <GiHamburger className="w-4 h-4" />,
     bibite: <RiDrinksLine className="w-4 h-4" />,
-    "fritte": <GiSandwich className="w-4 h-4" />,
+    "fritte": <GiFrenchFries className="w-4 h-4" />,
     "Indian cuisine": <GiNoodles className="w-4 h-4" />,
     dolco: <GiCupcake className="w-4 h-4" />
   };
