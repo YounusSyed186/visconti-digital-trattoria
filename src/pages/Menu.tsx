@@ -23,7 +23,6 @@ import {
   calculateCartTotal,
   removeFromCart
 } from "@/utils/cart";
-import { motion } from "framer-motion"
 
 /**
  * Updated Menu.tsx
@@ -586,30 +585,15 @@ const Menu = () => {
         {/* Menu Items */}
         <div className="mb-16">
           {isMobileView ? (
-            // Mobile Carousel View with Framer Motion
+            // Mobile Carousel View
             <div className="relative">
-              <motion.div
+              <div
                 ref={carouselRef}
                 className="flex overflow-x-hidden snap-x snap-mandatory no-scrollbar"
                 style={{ scrollBehavior: 'smooth' }}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                onDragEnd={(e, { offset, velocity }) => {
-                  // Handle swipe for manual navigation
-                  const swipe = Math.abs(offset.x) * velocity.x;
-
-                  if (swipe < -1000) {
-                    // Swipe left - next slide
-                    setCurrentSlide(prev => (prev + 1) % currentItems.length);
-                  } else if (swipe > 1000) {
-                    // Swipe right - previous slide
-                    setCurrentSlide(prev => (prev - 1 + currentItems.length) % currentItems.length);
-                  }
-                  resetAutoSlideTimer();
-                }}
               >
                 {currentItems.map((item, index) => {
                   const originalPrice = item.price;
@@ -617,65 +601,33 @@ const Menu = () => {
                     discount > 0 ? (originalPrice - (originalPrice * discount) / 100).toFixed(2) : null;
 
                   return (
-                    <motion.div
+                    <div
                       key={index}
                       className="w-full flex-shrink-0 snap-start px-2"
                       style={{ maxWidth: '640px', margin: '0 auto' }}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{
-                        opacity: 1,
-                        scale: 1,
-                        transition: {
-                          delay: index * 0.1,
-                          duration: 0.5
-                        }
-                      }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      whileHover={{ y: -5 }}
-                      transition={{ type: "spring", stiffness: 300 }}
                     >
                       <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-white group h-full flex flex-col mx-auto max-w-md">
                         {/* Image */}
-                        <motion.div
-                          className="relative h-48 overflow-hidden"
-                          whileHover={{ scale: 1.05 }}
-                          transition={{ duration: 0.3 }}
-                        >
+                        <div className="relative h-48 overflow-hidden">
                           <img
                             src={item.image || item.imageUrl || "/placeholder-food.jpg"}
                             alt={item.name}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             onError={handleImageError}
                           />
-                        </motion.div>
+                        </div>
 
                         {/* Details */}
                         <CardContent className="p-6">
-                          <motion.h3
-                            className="font-serif font-bold text-xl text-accent-red mb-3 text-center"
-                            style={{ color: 'var(--accent-red)' }}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                          >
+                          <h3 className="font-serif font-bold text-xl text-accent-red mb-3 text-center" style={{ color: 'var(--accent-red)' }}>
                             {item.name}
-                          </motion.h3>
-                          <motion.p
-                            className="text-gray-600 text-sm leading-relaxed text-center"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                          >
+                          </h3>
+                          <p className="text-gray-600 text-sm leading-relaxed text-center">
                             {item.description}
-                          </motion.p>
+                          </p>
 
                           {/* Price Display */}
-                          <motion.div
-                            className="mt-4 text-center"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                          >
+                          <div className="mt-4 text-center">
                             {discount > 0 ? (
                               <div className="flex justify-center items-center gap-2">
                                 <span className="text-lg text-accent-red font-bold" style={{ color: 'var(--accent-red)' }}>
@@ -684,32 +636,21 @@ const Menu = () => {
                                 <span className="text-sm text-gray-500 line-through">
                                   €{Number(originalPrice).toFixed(2)}
                                 </span>
-                                <motion.span
-                                  className="text-xs bg-accent-red text-white px-2 py-1 rounded-xl"
-                                  style={{ backgroundColor: 'var(--accent-red)' }}
-                                  initial={{ scale: 0 }}
-                                  animate={{ scale: 1 }}
-                                  transition={{ type: "spring", delay: 0.5 }}
-                                >
+                                <span className="text-xs bg-accent-red text-white px-2 py-1 rounded-xl" style={{ backgroundColor: 'var(--accent-red)' }}>
                                   -{discount}%
-                                </motion.span>
+                                </span>
                               </div>
                             ) : (
                               <span className="text-lg font-bold text-yellow-700" style={{ color: 'var(--primary-yellow-dark)' }}>
                                 €{Number(originalPrice).toFixed(2)}
                               </span>
                             )}
-                          </motion.div>
+                          </div>
 
                           {/* Cart Controls */}
-                          <motion.div
-                            className="mt-4 flex justify-center"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.5 }}
-                          >
+                          <div className="mt-4 flex justify-center">
                             <CartControls itemId={String(item._id || item.id)} />
-                          </motion.div>
+                          </div>
                         </CardContent>
 
                         {/* Footer */}
@@ -717,10 +658,10 @@ const Menu = () => {
                           {/* Price display can go here if needed */}
                         </CardFooter>
                       </Card>
-                    </motion.div>
+                    </div>
                   );
                 })}
-              </motion.div>
+              </div>
 
               {/* Carousel Controls */}
               {currentItems.length > 1 && (
@@ -730,7 +671,7 @@ const Menu = () => {
                   {/* Indicators */}
                   <div className="flex justify-center mt-4 space-x-2">
                     {currentItems.map((_, index) => (
-                      <motion.button
+                      <button
                         key={index}
                         className={`h-2 w-2 rounded-xl transition-all duration-300 ${currentSlide === index
                           ? 'bg-[var(--primary-yellow)] w-6'
@@ -741,8 +682,6 @@ const Menu = () => {
                           resetAutoSlideTimer();
                         }}
                         aria-label={`Go to slide ${index + 1}`}
-                        whileHover={{ scale: 1.2 }}
-                        whileTap={{ scale: 0.9 }}
                       />
                     ))}
                   </div>
@@ -750,104 +689,67 @@ const Menu = () => {
               )}
             </div>
           ) : (
-            // Desktop Grid View with Framer Motion
-            <motion.div
-              className="grid gap-4 md:gap-6 grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
+            // Desktop Grid View
+            <div className="grid gap-4 md:gap-6 grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {currentItems.map((item, index) => {
                 const originalPrice = item.price;
                 const discountedPrice =
                   discount > 0 ? (originalPrice - (originalPrice * discount) / 100).toFixed(2) : null;
 
                 return (
-                  <motion.div
+                  <Card
                     key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.1 }}
-                    whileHover={{
-                      y: -8,
-                      transition: { duration: 0.3 }
-                    }}
+                    className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-white group h-full flex flex-col"
                   >
-                    <Card className="overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 bg-white group h-full flex flex-col">
-                      {/* Image */}
-                      <motion.div
-                        className="relative h-40 md:h-48 overflow-hidden"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <img
-                          src={item.image || item.imageUrl || "/placeholder-food.jpg"}
-                          alt={item.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          onError={handleImageError}
-                        />
-                      </motion.div>
+                    {/* Image */}
+                    <div className="relative h-40 md:h-48 overflow-hidden">
+                      <img
+                        src={item.image || item.imageUrl || "/placeholder-food.jpg"}
+                        alt={item.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={handleImageError}
+                      />
+                    </div>
 
-                      {/* Details */}
-                      <CardContent className="p-6">
-                        <motion.h3
-                          className="font-serif font-bold text-xl text-yellow-800 group-hover:text-yellow-700 transition-colors mb-3 text-center"
-                          style={{ color: 'var(--primary-yellow-dark)' }}
-                          whileHover={{ color: 'var(--accent-red)' }}
-                        >
-                          {item.name}
-                        </motion.h3>
-                        <motion.p
-                          className="text-gray-600 text-sm leading-relaxed group-hover:text-gray-800 transition-colors text-center"
-                          whileHover={{ color: '#1f2937' }}
-                        >
-                          {item.description}
-                        </motion.p>
+                    {/* Details */}
+                    <CardContent className="p-6">
+                      <h3 className="font-serif font-bold text-xl text-yellow-800 group-hover:text-yellow-700 transition-colors mb-3 text-center" style={{ color: 'var(--primary-yellow-dark)' }}>
+                        {item.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed group-hover:text-gray-800 transition-colors text-center">
+                        {item.description}
+                      </p>
 
-                        {/* Price Display */}
-                        <motion.div
-                          className="mt-4 text-center"
-                          whileHover={{ scale: 1.05 }}
-                        >
-                          {discount > 0 ? (
-                            <div className="flex justify-center items-center gap-2">
-                              <span className="text-lg font-bold text-accent-red" style={{ color: 'var(--accent-red)' }}>
-                                €{(Number(originalPrice) - (Number(originalPrice) * discount) / 100).toFixed(2)}
-                              </span>
-                              <span className="text-sm text-gray-500 line-through">
-                                €{Number(originalPrice).toFixed(2)}
-                              </span>
-                              <motion.span
-                                className="text-xs bg-accent-red text-white px-2 py-1 rounded-xl"
-                                style={{ backgroundColor: 'var(--accent-red)' }}
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                              >
-                                -{discount}%
-                              </motion.span>
-                            </div>
-                          ) : (
-                            <span className="text-lg font-bold text-yellow-700" style={{ color: 'var(--primary-yellow-dark)' }}>
+                      {/* Price Display */}
+                      <div className="mt-4 text-center">
+                        {discount > 0 ? (
+                          <div className="flex justify-center items-center gap-2">
+                            <span className="text-lg font-bold text-accent-red" style={{ color: 'var(--accent-red)' }}>
+                              €{(Number(originalPrice) - (Number(originalPrice) * discount) / 100).toFixed(2)}
+                            </span>
+                            <span className="text-sm text-gray-500 line-through">
                               €{Number(originalPrice).toFixed(2)}
                             </span>
-                          )}
-                        </motion.div>
-                      </CardContent>
+                            <span className="text-xs bg-accent-red text-white px-2 py-1 rounded-xl" style={{ backgroundColor: 'var(--accent-red)' }}>
+                              -{discount}%
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-lg font-bold text-yellow-700" style={{ color: 'var(--primary-yellow-dark)' }}>
+                            €{Number(originalPrice).toFixed(2)}
+                          </span>
+                        )}
+                      </div>
+                    </CardContent>
 
-                      {/* Footer */}
-                      <CardFooter className="p-4 pt-0 flex justify-center">
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <CartControls itemId={String(item._id || item.id)} />
-                        </motion.div>
-                      </CardFooter>
-                    </Card>
-                  </motion.div>
+                    {/* Footer */}
+                    <CardFooter className="p-4 pt-0 flex justify-center">
+                      <CartControls itemId={String(item._id || item.id)} />
+                    </CardFooter>
+                  </Card>
                 );
               })}
-            </motion.div>
+            </div>
           )}
         </div>
 
