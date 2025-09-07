@@ -23,6 +23,7 @@ import {
   calculateCartTotal,
   removeFromCart
 } from "@/utils/cart";
+import { motion, AnimatePresence } from "framer-motion";
 
 /**
  * Updated Menu.tsx
@@ -766,29 +767,74 @@ const Menu = () => {
       </div>
 
       {/* Bottom Navigation Tabs - Mobile Only */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[var(--primary-yellow-dark)] border-t border-yellow-600 shadow-lg z-20 md:hidden">
+
+
+// ... (other code)
+
+      <motion.div
+        className="fixed bottom-0 left-0 right-0 bg-[var(--primary-yellow-dark)] border-t border-yellow-600 shadow-lg z-20 md:hidden"
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <div className="overflow-x-auto">
           <div className="flex px-2 py-2 min-w-max">
             {Object.entries(tabLabels).map(([key, label]) => (
-              <button
+              <motion.button
                 key={key}
                 onClick={() => {
                   setActiveTab(key);
                   setCurrentSlide(0);
                 }}
                 className={`flex flex-col items-center justify-center px-3 py-2 rounded-xl 
-                  text-xs font-medium mx-1 min-w-[60px] transition-colors
-                  ${activeTab === key
+            text-xs font-medium mx-1 min-w-[60px] transition-colors
+            ${activeTab === key
                     ? 'bg-[var(--primary-yellow)] text-black'
                     : 'text-yellow-100 bg-[var(--primary-yellow-dark)] hover:bg-[var(--primary-yellow)]'}`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <span className="mb-1">{tabIcons[key as keyof typeof tabIcons]}</span>
-                <span>{label}</span>
-              </button>
+                <motion.span
+                  className="mb-1"
+                  animate={{
+                    scale: activeTab === key ? 1.2 : 1,
+                    rotate: activeTab === key ? [0, -10, 10, -10, 0] : 0
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {tabIcons[key as keyof typeof tabIcons]}
+                </motion.span>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={activeTab === key ? "active" : "inactive"}
+                    initial={{ y: 5, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -5, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {label}
+                  </motion.span>
+                </AnimatePresence>
+
+                {/* Active indicator */}
+                <AnimatePresence>
+                  {activeTab === key && (
+                    <motion.div
+                      className="absolute bottom-0 w-4 h-1 bg-black rounded-t-full"
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      exit={{ scaleX: 0 }}
+                      transition={{ duration: 0.3 }}
+                      style={{ originX: 0.5 }}
+                    />
+                  )}
+                </AnimatePresence>
+              </motion.button>
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Custom CSS for hiding scrollbar */}
       <style jsx>{`
