@@ -20,6 +20,7 @@ export default function OfferBadgeFetcher() {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URI}api/offer-badges`) // ✅ route corrected
       .then(async (res) => {
+        console.log(res);
         if (!res.ok) throw new Error("Failed to fetch offers");
         return await res.json();
       })
