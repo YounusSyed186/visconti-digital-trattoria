@@ -318,42 +318,29 @@ const Menu = () => {
     if (e.touches.length !== 1) return;
     touchStartX.current = e.touches[0].clientX;
     touchStartTime.current = Date.now();
-    touchEndX.current = 0;
-    slideAnimationInProgress.current = false;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (e.touches.length !== 1) return;
-    touchEndX.current = e.touches[0].clientX;
-    // we avoid heavy logic here to keep UI responsive
+    // Prevent default to avoid browser interference with scrolling
+    e.preventDefault();
   };
 
-  const handleTouchEnd = () => {
-    const start = touchStartX.current;
-    const end = touchEndX.current || start; // if no move, treat as tap
-    const len = start - end;
-    const time = Date.now() - touchStartTime.current;
-    const velocity = Math.abs(len) / Math.max(1, time); // px/ms
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!e.changedTouches.length) return;
 
-    // If small movement and slow -> treat as tap (do nothing)
-    if (Math.abs(len) < minSwipeDistance.current && time > maxTapDuration.current) {
-      touchStartX.current = 0;
-      touchEndX.current = 0;
-      return;
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = touchStartX.current - endX;
+    const timeElapsed = Date.now() - touchStartTime.current;
+
+    // Simple distance-based detection (no velocity needed)
+    if (Math.abs(deltaX) > minSwipeDistance.current && timeElapsed < 300) {
+      if (deltaX > 0) {
+        goToNextSlide();
+      } else {
+        goToPrevSlide();
+      }
     }
-
-    // More len or high velocity = swipe
-    const isLeftSwipe = len > minSwipeDistance.current || (len > 10 && velocity > 0.3);
-    const isRightSwipe = len < -minSwipeDistance.current || (len < -10 && velocity > 0.3);
-
-    if (isLeftSwipe) {
-      goToNextSlide();
-    } else if (isRightSwipe) {
-      goToPrevSlide();
-    }
-
-    touchStartX.current = 0;
-    touchEndX.current = 0;
   };
 
   // Debounced search input change
