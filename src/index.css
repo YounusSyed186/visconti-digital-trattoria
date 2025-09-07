@@ -294,3 +294,13 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+/* 2.1  card hover glow */
+.card-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(400px at 50% 0%, rgb(249 200 70 / 0.15), transparent 80%);
+  opacity: 0;
+  transition: opacity var(--duration) var(--ease-out);
+}
+.group:hover .card-glow { opacity: 1; }
