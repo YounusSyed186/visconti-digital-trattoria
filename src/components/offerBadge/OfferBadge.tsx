@@ -88,131 +88,94 @@ export default function OfferBadge({ offer: initialOffer, fetchUrl, className = 
 
   return (
     <>
-      {/* Enhanced burst animation starting from borders */}
+      {/* Authentic confetti burst */}
       {showBurst && (
         <div className="fixed inset-0 pointer-events-none z-[9999] flex items-center justify-center">
-          {/* Border particles coming from edges */}
-          {Array.from({ length: 16 }).map((_, i) => {
-            // Determine starting position from different edges
-            const edge = i % 4; // 0: top, 1: right, 2: bottom, 3: left
-            let startX, startY;
-            
-            switch(edge) {
-              case 0: // top
-                startX = Math.random() * window.innerWidth;
-                startY = -50;
-                break;
-              case 1: // right
-                startX = window.innerWidth + 50;
-                startY = Math.random() * window.innerHeight;
-                break;
-              case 2: // bottom
-                startX = Math.random() * window.innerWidth;
-                startY = window.innerHeight + 50;
-                break;
-              case 3: // left
-                startX = -50;
-                startY = Math.random() * window.innerHeight;
-                break;
-              default:
-                startX = 0;
-                startY = 0;
-            }
-            
-            const size = 10 + Math.random() * 15;
-            const duration = 1.5 + Math.random() * 0.5;
-            const delay = Math.random() * 0.4;
-            
+          {Array.from({ length: 24 }).map((_, i) => {
+            const angle = (i / 24) * Math.PI * 2;
+            const distance = 250 + Math.random() * 150;
+            const size = 6 + Math.random() * 8;
+            const hue = 30 + Math.random() * 30;
+            const delay = Math.random() * 0.3;
+
             return (
               <motion.div
                 key={i}
-                className="absolute rounded-full bg-gradient-to-br from-amber-300 via-orange-400 to-red-500"
+                className="absolute rounded-full"
                 style={{
                   width: size,
                   height: size,
-                  top: startY,
-                  left: startX,
+                  background: `hsl(${hue}, 100%, 60%)`,
+                  boxShadow: `0 0 4px hsl(${hue}, 100%, 70%)`,
                 }}
-                initial={{ scale: 0, opacity: 0 }}
+                initial={{ x: 0, y: 0, scale: 0, opacity: 1 }}
                 animate={{
-                  scale: [0, 1, 0.8, 0],
-                  opacity: [0, 1, 0.8, 0],
-                  x: window.innerWidth/2 - startX,
-                  y: window.innerHeight/2 - startY,
+                  x: Math.cos(angle) * distance,
+                  y: Math.sin(angle) * distance + Math.random() * 80 - 40,
+                  scale: [0, 1.2, 0],
+                  opacity: [1, 1, 0],
                 }}
                 transition={{
-                  duration: duration,
-                  delay: delay,
-                  ease: "easeOut",
+                  duration: 1.2,
+                  delay,
+                  ease: [0.22, 1, 0.36, 1],
                 }}
-                onAnimationComplete={() => {
-                  if (i === 15) setShowBurst(false);
-                }}
+                onAnimationComplete={() => i === 23 && setShowBurst(false)}
               />
             );
           })}
-          
-          {/* Central flash that appears after particles */}
+
           <motion.div
-            className="absolute rounded-full bg-gradient-to-r from-amber-400 to-orange-500"
+            className="absolute rounded-full bg-gradient-to-r from-amber-300 to-orange-400"
             initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: [0, 20, 0], opacity: [0, 0.7, 0] }}
-            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-            style={{ width: 30, height: 30 }}
+            animate={{ scale: [0, 3, 0], opacity: [0, 0.6, 0] }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            style={{ width: 100, height: 100, filter: "blur(20px)" }}
           />
         </div>
       )}
 
-      {/* Offer Badge with border entrance animation */}
+      {/* Offer Badge with shimmer & spring entrance */}
       <motion.article
         aria-label={`Offer: ${offer.name}`}
-        initial={{ 
-          scale: 0.8,
-          opacity: 0,
-          boxShadow: "0 0 0 0 rgba(255,215,0,0)"
-        }}
-        animate={{ 
-          scale: 1,
-          opacity: 1,
-          boxShadow: [
-            "0 0 0 0 rgba(255,215,0,0)",
-            "0 0 0 10px rgba(255,215,0,0.3)",
-            "0 0 0 20px rgba(255,215,0,0.1)",
-            "0 0 20px rgba(255,215,0,0.15)"
-          ]
-        }}
-        transition={{ 
-          duration: 1.2,
-          ease: "easeOut",
-          boxShadow: {
-            duration: 1.5,
-            ease: "easeOut"
-          }
-        }}
-        whileHover={{ y: -5, scale: 1.02 }}
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 120, damping: 14 }}
+        whileHover={{ y: -4, scale: 1.02 }}
         className={`fixed top-20 right-4 z-50 
           flex items-center gap-4 p-4 
           rounded-2xl w-full max-w-[80%] sm:w-[350px] 
           border border-amber-400/30 
-          bg-gradient-to-br from-zinc-900 via-neutral-800 to-zinc-900 
-          text-gray-100 overflow-visible ${className}`}
+          bg-gradient-to-br from-zinc-900 via-neutral-900 to-zinc-900 
+          text-gray-100 overflow-hidden shadow-2xl ${className}`}
       >
-        {/* Discount Circle with border animation */}
+        {/* Shimmer sweep */}
+        <motion.div
+          className="absolute inset-0 opacity-30"
+          animate={{
+            background: [
+              "linear-gradient(110deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%)",
+              "linear-gradient(110deg, transparent 60%, rgba(255,255,255,0.1) 70%, transparent 80%)",
+            ],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          style={{ backgroundSize: "200% 100%" }}
+        />
+
+        {/* Discount Circle */}
         <motion.div
           className="relative flex-shrink-0 flex items-center justify-center h-16 w-16 rounded-full 
           bg-gradient-to-tr from-amber-500 via-red-500 to-orange-500 shadow-lg"
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-          style={{
-            boxShadow: "0 0 0 0 rgba(255,140,0,0)"
-          }}
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0 0 0 5px rgba(255,140,0,0.3)"
-          }}
+          whileHover={{ scale: 1.05 }}
         >
-          <motion.div 
+          <motion.div
             className="text-white text-lg font-extrabold leading-none drop-shadow-md"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -220,7 +183,7 @@ export default function OfferBadge({ offer: initialOffer, fetchUrl, className = 
           >
             {offer.discount}%
           </motion.div>
-          <motion.span 
+          <motion.span
             className="absolute -bottom-1 -right-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-medium bg-black/70 text-amber-300 border border-amber-400/40"
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
@@ -230,9 +193,9 @@ export default function OfferBadge({ offer: initialOffer, fetchUrl, className = 
           </motion.span>
         </motion.div>
 
-        {/* Text with staggered animation */}
+        {/* Textual content */}
         <div className="min-w-0">
-          <motion.h3 
+          <motion.h3
             className="text-sm font-bold text-amber-300 truncate"
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -240,7 +203,7 @@ export default function OfferBadge({ offer: initialOffer, fetchUrl, className = 
           >
             {offer.name}
           </motion.h3>
-          <motion.p 
+          <motion.p
             className="text-xs text-gray-400 truncate"
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -249,7 +212,7 @@ export default function OfferBadge({ offer: initialOffer, fetchUrl, className = 
             {offer.occasion}
           </motion.p>
 
-          <motion.div 
+          <motion.div
             className="mt-2 flex items-center gap-3 text-gray-400"
             initial={{ y: 10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -271,8 +234,8 @@ export default function OfferBadge({ offer: initialOffer, fetchUrl, className = 
           </motion.div>
         </div>
 
-        {/* CTA */}
-        <motion.div 
+        {/* CTA Button */}
+        <motion.div
           className="ml-auto"
           initial={{ scale: 0, rotate: 180 }}
           animate={{ scale: 1, rotate: 0 }}

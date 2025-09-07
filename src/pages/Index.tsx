@@ -5,6 +5,7 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import LanguageToggle from "@/components/LanguageToggle";
 import OfferBadgeFetcher from "@/components/offerBadge/OfferBadgefetch";
+import AnimatedSection from "@/components/AnimatedSection";
 
 const Index = () => {
   return (
@@ -12,15 +13,24 @@ const Index = () => {
       <LanguageToggle />
 
       {/* Floating Offer Badge */}
-        <OfferBadgeFetcher  />
+      <OfferBadgeFetcher />
 
       <HeroSection />
-      <AboutSection />
-      <MenuSection />
-      <ContactSection />
+      
+      <AnimatedSection>
+        <AboutSection />
+      </AnimatedSection>
+      
+      <AnimatedSection>
+        <MenuSection />
+      </AnimatedSection>
+      
+      <AnimatedSection>
+        <ContactSection />
+      </AnimatedSection>
+      
       <Footer />
     </div>
-
   );
 };
 
