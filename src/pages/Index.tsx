@@ -5,8 +5,6 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import LanguageToggle from "@/components/LanguageToggle";
 import OfferBadgeFetcher from "@/components/offerBadge/OfferBadgefetch";
-import AnimatedSection from "@/components/AnimatedSection";
-
 const Index = () => {
   return (
     <div className="min-h-screen bg-background relative">
@@ -16,19 +14,13 @@ const Index = () => {
       <OfferBadgeFetcher />
 
       <HeroSection />
-      
-      <AnimatedSection>
-        <AboutSection />
-      </AnimatedSection>
-      
-      <AnimatedSection>
-        <MenuSection />
-      </AnimatedSection>
-      
-      <AnimatedSection>
-        <ContactSection />
-      </AnimatedSection>
-      
+
+      <AboutSection />
+
+      <MenuSection />
+
+      <ContactSection />
+
       <Footer />
     </div>
   );

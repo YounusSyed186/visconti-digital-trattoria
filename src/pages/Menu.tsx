@@ -665,7 +665,7 @@ const Menu = () => {
               </div>
 
               {/* Carousel Controls */}
-              {currentItems.length > 1 && (
+              {currentItems.length >= 1 && (
                 <>
                   {/* Prev/Next buttons overlay */}
 
